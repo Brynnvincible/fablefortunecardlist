@@ -1,0 +1,17 @@
+@model FableFortuneCardList.Models.Card
+@using System.IO;
+
+<div class="deckCardContainer" style="background-image: url('/images/cards/@(Model.Name.Replace(' ', '_') + ".png")');">
+    <div class="deckCardWrapper @Model.Class @Model.Rarity">
+        <span class="CardName">@Model.Name</span>
+        <span class="gold">@Model.Gold</span>
+        <span class="strength">@Model.Strength</span>
+        <span class="health">@Model.Health</span>
+    </div>
+</div>
+
+
+
+
+
+

@@ -1,0 +1,17 @@
+@model FableFortuneCardList.Models.Deck
+@using FableFortuneCardList.Enums
+<h3>Deck Cards</h3>
+
+<div class="deckCards">
+    <h4>Trophy: @Model.DeckCards.Count(x => x.Card.Class == ClassType.Trophy)/1</h4>
+    @foreach (var card in Model.DeckCards.Where(x => x.Card.Class == ClassType.Trophy).GroupBy(x => x.Card.Name).Select(g => g.First()).ToList())
+    {
+        Html.RenderPartial("DeckCardEditView", card);
+    }
+    <h4>Deck: <span class="deckCount">@Model.DeckCards.Count(x=>x.Card.Class != ClassType.Trophy)</span>/30</h4>
+    @foreach (var card in Model.DeckCards.Where(x => x.Card.Class != ClassType.Trophy).OrderBy(x => x.Card.Gold).GroupBy(x => x.Card.Name).Select(g => g.First()).ToList())
+    {
+        Html.RenderPartial("DeckCardEditView", card);
+    }
+</div>
+   

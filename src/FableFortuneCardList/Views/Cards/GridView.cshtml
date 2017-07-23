@@ -1,0 +1,15 @@
+@model IEnumerable<FableFortuneCardList.Models.Card>
+
+@{
+    ViewData["Title"] = "GridView";
+}
+
+<h1>Grid View: All Cards</h1>
+<div class="panel">
+    <div class="panel-body">
+        @foreach (var item in Model)
+        {
+            <a href="/cards/details/@item.Name.Replace(' ', '_')">@Html.Partial("CardView", item)</a>
+        }
+    </div>
+</div>

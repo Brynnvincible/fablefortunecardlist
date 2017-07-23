@@ -1,0 +1,40 @@
+@model FableFortuneCardList.Models.Deck
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Deck Details</h2>
+
+<div class="col-md-10">
+    <div class="panel">
+        <div class="panel-body">
+            <div class="col-md-6">
+                <h2>@Model.Name</h2>
+                <h3>Description: @Model.Description</h3>
+                <h4>Class: @Model.Class</h4>
+                <p>Created by: @Model.CreatedBy.UserName</p>
+            </div>
+            <div class="col-md-6">
+                @{Html.RenderPartial("DeckGoldSummary", Model);}
+            </div>
+            <hr />
+            @foreach (var card in Model.DeckCards.OrderBy(x=>x.Card.Gold))
+            {
+                Html.RenderPartial("CardView", card.Card);
+            }
+            <div class="clearfix"></div>
+            <div>
+                <a asp-action="Index">Back to List</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="col-md-2">
+    <div id="DeckCardSummary">
+        @{Html.RenderPartial("DeckCardSummary", Model);}
+    </div>
+</div>
+<div class="clearfix"></div>
+

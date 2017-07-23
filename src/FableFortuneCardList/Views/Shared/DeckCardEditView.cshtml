@@ -1,0 +1,31 @@
+@model FableFortuneCardList.Models.DeckCard
+@using System.IO;
+
+<div class="deckCard">
+    @{Html.RenderPartial("DeckCardView", Model.Card);}
+    @if (Model.Deck.DeckCards.Count(x => x.CardId == Model.Card.ID) > 1)
+    {
+        <span class="deckCardCount">x2</span>
+
+    }
+    @if (ViewContext.RouteData.Values["action"].ToString().ToLower() == "edit")
+    {
+        <span class="deckCardRemoveButton">
+            <form asp-action="RemoveCard">
+                <input type="hidden" name="deckCardId" value="@Model.Id" />
+                <input type="submit" value="-" class="btn btn-default removeCardBtn" style="font-size:8pt;" />
+            </form>
+        </span>
+    }
+</div>
+
+
+
+
+
+
+
+
+
+
+

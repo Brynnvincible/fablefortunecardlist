@@ -1,0 +1,83 @@
+@model FableFortuneCardList.Models.Card
+@using FableFortuneCardList.Enums
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+<div class="panel">
+    <div class="panel-body">
+        <form asp-action="Edit">
+            <div class="form-horizontal">
+                <h4>Card</h4>
+                <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="ID" />
+                <div class="form-group">
+                    <label asp-for="Gold" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Gold" class="form-control" />
+                        <span asp-validation-for="Gold" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Name" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Ability" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <textarea asp-for="Ability" class="form-control" ></textarea>
+                        <span asp-validation-for="Ability" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Class" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <select asp-for="Class" class="form-control" asp-items="Html.GetEnumSelectList<ClassType>()"></select>
+                        <span asp-validation-for="Class" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Strength" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Strength" class="form-control" />
+                        <span asp-validation-for="Strength" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Health" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Health" class="form-control" />
+                        <span asp-validation-for="Health" class="text-danger" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Rarity" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <select asp-for="Rarity" class="form-control" asp-items="Html.GetEnumSelectList<RarityType>()"></select>
+                        <span asp-validation-for="Rarity" class="text-danger" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </div>
+</div>
+        @section Scripts {
+            @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        }

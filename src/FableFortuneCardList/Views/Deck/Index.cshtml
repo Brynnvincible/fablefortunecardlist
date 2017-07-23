@@ -1,0 +1,89 @@
+@model IEnumerable<FableFortuneCardList.Models.Deck>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Deck List</h2>
+<h3>Hand picked decks created by the community.</h3>
+<div class="clearfix"></div>
+<div class="panel">
+    <div class="panel-body">
+        @if (User.Identity.IsAuthenticated && User.IsInRole("DeckMaster"))
+        {
+            <p>
+                <a asp-action="Create">Create New</a>
+            </p>
+        }
+        <table class="table" id="myTable">
+            <thead>
+                <tr>
+
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Class)
+                    </th>
+                    <th>Created By</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Class)
+                        </td>
+                        <td>@item.CreatedBy.UserName</td>
+                       
+                            <td>   
+                                <a asp-action="Details" asp-route-id="@item.ID">Details</a>
+
+                                @if (item.CreatedBy.UserName == User.Identity.Name)
+                                {
+                                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a>
+                                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                                }
+                            </td>
+                       
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            var table = $("#myTable").DataTable({
+                "colReorder": true,
+                "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                "iDisplayLength": 50
+            });
+            var filterLinks = $(".filterList a");
+            var filteredData = filterLinks.click(function () {
+                var filterValue = $(this).html();
+                if (filterValue == "Clear")
+                    table.search("").draw();
+                else {
+                    var currentSearch = table.search();
+                    if (!currentSearch.includes(filterValue))
+                        table.search(currentSearch + " " + filterValue).draw();
+                }
+
+            });
+        });
+    </script>
+}
