@@ -10,9 +10,7 @@
         <ul class="nav navbar-nav navbar-right">
             @if (User.IsInRole("Admin"))
             {
-            <li><a asp-area="" asp-controller="Import" asp-action="Upload">Upload XLSX</a></li>
-                        
-            <li><a asp-area="" asp-controller="Import" asp-action="UploadImages">Upload Images</a></li>
+            <li><a asp-area="" asp-controller="UserManager" asp-action="Index">User Manager</a></li>            
             }
             <li>
                 <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
@@ -26,7 +24,7 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        @*<li><a asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>*@
+        <li><a asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
         <li><a asp-area="" asp-controller="Account" asp-action="Login">Log in</a></li>
     </ul>
 }

@@ -1,4 +1,4 @@
-@model FableFortuneCardList.Models.EditDeckViewModel
+@model FableFortuneCardList.Models.DeckViewModels.EditDeckViewModel
 @using FableFortuneCardList.Enums
 @{
     ViewData["Title"] = "Edit";
@@ -115,6 +115,33 @@
             $(".addCardBtn").button();
         }
 
+        function bindSummaryTooltips(){
+            $(document).tooltip({
+                items: ".deckCard",
+                track: true,
+                tooltipClass: "cardTemplateTooltip",
+                content: function () {
+                    var element = $(this).find(".cardTemplateTooltip");
+
+                    return element.html();
+                }
+            });        
+        }
+
+        function bindTableTooltips(){
+           
+            $(document).tooltip({
+                items: "#AvailableCards tbody tr td a",
+                track: true,
+                tooltipClass: "cardTemplateTooltip",
+                content: function () {
+                    var element = $(this).parent().parent().find(".cardTemplateTooltip");
+
+                    return element.html();
+                }
+            });        
+        }
+
         function loadAvailableCards(){
             $.ajax({
                 url: "/Deck/AvailableCards/@Model.ID",
@@ -122,6 +149,8 @@
                     $("#AvailableCardsTable").html(html);
                     bindAddButtons();
                     bindAvailableCardsTable();
+
+
                 }
             });
         }
@@ -154,7 +183,7 @@
                     data: data,
                     success: function (html) {
                         $("#DeckCardSummary").html(html);
-
+                        bindSummaryTooltips();
                         bindRemoveButtons();                        
                         reloadDeckGoldSummary();
                         loadAvailableCards();
@@ -178,7 +207,7 @@
                     data: data,
                     success: function (html) {
                         $("#DeckCardSummary").html(html);
-
+                        bindSummaryTooltips();
                         bindRemoveButtons();
 
                         loadAvailableCards();
@@ -193,6 +222,8 @@
             bindAddButtons();
             bindRemoveButtons();
             bindAvailableCardsTable();
+            bindTableTooltips();
+            bindSummaryTooltips();
             var filterLinks = $(".filterList a");
             var filteredData = filterLinks.click(function () {
                 var filterValue = $(this).html();
@@ -204,19 +235,6 @@
                         table.search(currentSearch + " " + filterValue).draw();
                 }
             });
-
-            $(document).tooltip(
-            {
-                items: "#AvailableCards tbody tr td a",
-                track: true,
-                tooltipClass: "cardTemplateTooltip",
-                content: function () {
-                    var element = $(this).parent().parent().find(".cardTemplateTooltip");
-
-                    return element.html();
-                }
-            });
-
         });
     </script>
 }

@@ -8,7 +8,8 @@
         <span class="deckCardCount">x2</span>
 
     }
-    @if (ViewContext.RouteData.Values["action"].ToString().ToLower() == "edit")
+
+    @if (Context.Request.Path.Value.Contains("Edit") || Context.Request.Path.Value.Contains("AddCard"))
     {
         <span class="deckCardRemoveButton">
             <form asp-action="RemoveCard">

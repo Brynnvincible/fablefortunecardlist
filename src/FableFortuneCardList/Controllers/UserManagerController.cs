@@ -33,8 +33,9 @@ namespace FableFortuneCardList.Controllers
                 Id = u.Id,
                 Name = u.Name,
                 UserName = u.UserName,
-                Email = u.Email
-            }).ToList();
+                Email = u.Email,
+                RoleName = roleManager.Roles.Single(x => x.Id == u.Roles.Single().RoleId).Name
+        }).ToList();
             return View(model);
         }
 

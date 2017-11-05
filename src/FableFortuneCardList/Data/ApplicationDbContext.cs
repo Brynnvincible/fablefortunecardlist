@@ -38,5 +38,9 @@ namespace FableFortuneCardList.Data
         public DbSet<Deck> Deck { get; set; }         
         
         public DbSet<DeckCard> DeckCard { get; set; }   
+
+        public DbSet<Comment> Comment { get; set; }
+
+        public DbSet<CommentThread> CommentThread { get; set; }
     }
 }

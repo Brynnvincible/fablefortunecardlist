@@ -1,4 +1,4 @@
-@model FableFortuneCardList.Models.EditDeckViewModel
+@model FableFortuneCardList.Models.DeckViewModels.EditDeckViewModel
 @using FableFortuneCardList.Enums
 @using System.IO;
 
@@ -64,6 +64,7 @@
                     @Html.DisplayFor(modelItem => item.Health)
                 </td>
                 <td class="rarity @item.Rarity mobileHideSmall">
+                    <span style="display:none;">@((int)item.Rarity)</span>
                     @Html.DisplayFor(modelItem => item.Rarity)
                 </td>
                 <td class="mobileHideSmall">

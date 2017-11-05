@@ -18,6 +18,7 @@
                     <th>Name</th>
                     <th>UserName</th>
                     <th>Email</th>
+                    <th>Role</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -28,6 +29,7 @@
                         <td>@item.Name</td>
                         <td>@item.UserName</td>
                         <td>@item.Email</td>
+                        <td>@item.RoleName</td>
                         <td>
                             <a id="editUserModal" data-toggle="modal" asp-action="EditUser" asp-route-id="@item.Id" data-target="#modal-action-user"
                                class="btn btn-info">

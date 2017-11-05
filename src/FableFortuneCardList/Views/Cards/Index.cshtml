@@ -115,6 +115,7 @@
                             @Html.DisplayFor(modelItem => item.Health)
                         </td>
                         <td class="rarity @item.Rarity mobileHideSmall">
+                            <span style="display:none;">@((int)item.Rarity)</span>
                             @Html.DisplayFor(modelItem => item.Rarity)
                         </td>
                         <td class="mobileHideSmall">
@@ -154,7 +155,8 @@
             var table = $("#myTable").DataTable({
                 "colReorder": true,
                 "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-                "iDisplayLength": 50
+                "iDisplayLength": 50,
+                "stateSave": true
             });
             var filterLinks = $(".filterList a");
             var filteredData = filterLinks.click(function () {

@@ -29,31 +29,10 @@ namespace FableFortuneCardList.Controllers
                   
         public IActionResult Index()
         {
-            List<Deck> deckList = _context.Deck.Include(x=>x.CreatedBy).ToList();
+            List<Deck> deckList = _context.Deck.Include(x=>x.CreatedBy).Include(x=>x.DeckCards).ThenInclude(x=>x.Card).ToList();
 
             return View(deckList);
         }
-
-        //[Authorize(Roles = "Admin,DeckMaster")]
-        //public async Task<IActionResult> AddCardButton(int deckId, int cardId)
-        //{
-        //    Deck deck = await _context.Deck.FirstOrDefaultAsync(x => x.ID == deckId);
-        //    Card card = await _context.Card.FirstOrDefaultAsync(x => x.ID == cardId);
-        //    var isDisabled = false;
-
-        //    if ((deck.DeckCards.Count(x => x.CardId == card.ID) >= 2 || deck.DeckCards.Count >= 30) ||
-        //              (deck.DeckCards.Count(x => x.Card.Class == ClassType.Trophy) >= 1 && card.Class == ClassType.Trophy) ||
-        //                (deck.DeckCards.Count(x => x.Card.Name == card.Name) >= 1 && card.Rarity == RarityType.Fabled))
-        //    {
-        //        isDisabled = true;
-        //    }
-
-        //    var viewModel = new DeckAddCardButtonViewModel();
-        //    viewModel.CardID = cardId;
-        //    viewModel.IsDisabled = isDisabled;
-
-        //    return PartialView("DeckAddCardButton", viewModel);
-        //}
 
         public async Task<IActionResult> AvailableCards(int? id)
         {
@@ -90,7 +69,8 @@ namespace FableFortuneCardList.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles="DeckMaster")]
+
+        [Authorize(Roles = "DeckMaster, Admin")]
         public async Task<IActionResult> AddCard(int deckId, int cardId)
         {
             var deckCard = new DeckCard();
@@ -106,7 +86,7 @@ namespace FableFortuneCardList.Controllers
         }
         
         [HttpPost]
-        [Authorize(Roles = "DeckMaster")]
+        [Authorize(Roles = "DeckMaster, Admin")]
         public async Task<IActionResult> RemoveCard(int deckCardId)
         {
             DeckCard deckCard = _context.DeckCard.SingleOrDefault(m => m.Id == deckCardId);
@@ -126,15 +106,15 @@ namespace FableFortuneCardList.Controllers
             return PartialView("DeckGoldSummary", deck);
         }
 
-        [Authorize(Roles = "DeckMaster")]
-        public async Task<IActionResult> Create()
+        [Authorize(Roles = "DeckMaster, Admin")]
+        public IActionResult Create()
         {
             var deck = new Deck();
 
             return View(deck);
         }
 
-        [Authorize(Roles = "DeckMaster")]
+        [Authorize(Roles = "DeckMaster, Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID, Name, Description, Class")]Deck deck)
@@ -153,8 +133,7 @@ namespace FableFortuneCardList.Controllers
             return View(deck);
         }
 
-        [Authorize(Roles = "DeckMaster")]
-
+        [Authorize(Roles = "DeckMaster, Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -180,10 +159,10 @@ namespace FableFortuneCardList.Controllers
             }
             return View(viewModel);
         }
-        
+
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "DeckMaster")]
+        [Authorize(Roles = "DeckMaster, Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID, Name, Description, Class")] Deck deck)
@@ -227,8 +206,9 @@ namespace FableFortuneCardList.Controllers
 
             return View(viewModel);
         }
-        
-        [Authorize(Roles = "DeckMaster")]
+
+
+        [Authorize(Roles = "DeckMaster, Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -244,8 +224,9 @@ namespace FableFortuneCardList.Controllers
 
             return View(deck);
         }
-        
-        [Authorize(Roles = "DeckMaster")]
+
+
+        [Authorize(Roles = "DeckMaster, Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

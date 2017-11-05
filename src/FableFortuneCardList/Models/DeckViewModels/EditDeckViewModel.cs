@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FableFortuneCardList.Models
+namespace FableFortuneCardList.Models.DeckViewModels
 {
     public class EditDeckViewModel
     {

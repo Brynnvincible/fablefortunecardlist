@@ -1,0 +1,61 @@
+@model FableFortuneCardList.Models.Deck
+
+@{
+    double totalCardCount = Model.DeckCards.Count();
+    double zeroCostHeight = 100 * (Model.DeckCards.Count(x => x.Card.Gold == 0) / totalCardCount);
+    double oneCostHeight = 100 * (Model.DeckCards.Count(x => x.Card.Gold == 1) / totalCardCount);
+    double twoCostHeight = 100 * (Model.DeckCards.Count(x => x.Card.Gold == 2) / totalCardCount);
+    double threeCostHeight = 100 * (Model.DeckCards.Count(x => x.Card.Gold == 3) / totalCardCount);
+    double fourCostHeight = 100 * (Model.DeckCards.Count(x => x.Card.Gold == 4) / totalCardCount);
+    double fiveCostHeight = 100 * (Model.DeckCards.Count(x => x.Card.Gold == 5) / totalCardCount);
+    double sixCostHeight = 100 * (Model.DeckCards.Count(x => x.Card.Gold == 6) / totalCardCount);
+    double sevenUpCostHeight = 100 * (Model.DeckCards.Count(x => x.Card.Gold >= 7) / totalCardCount);
+}
+
+    <div class="goldCostSummary-mini">
+        <ul class="goldCost">
+            <li>
+                <div class="cost-bar">
+                    <div class="cost" style="height: @(zeroCostHeight)%;"></div>
+                </div>
+            </li>
+            <li>
+                <div class="cost-bar">
+                    <div class="cost" style="height: @(oneCostHeight)%;"></div>
+                </div>
+            </li>
+            <li>
+                <div class="cost-bar">
+                    <div class="cost" style="height: @(twoCostHeight)%;"></div>
+                </div>
+            </li>
+
+            <li>
+                <div class="cost-bar">
+                    <div class="cost" style="height: @(threeCostHeight)%;"></div>
+                </div>
+            </li>
+
+            <li>
+                <div class="cost-bar">
+                    <div class="cost" style="height: @(fourCostHeight)%;"></div>
+                </div>
+            </li>
+            <li>
+                <div class="cost-bar">
+                    <div class="cost" style="height: @(fiveCostHeight)%;"></div>
+                </div>
+            </li>
+            <li>
+                <div class="cost-bar">
+                    <div class="cost" style="height: @(sixCostHeight)%;"></div>
+                </div>
+            </li>
+            <li>
+                <div class="cost-bar">
+                    <div class="cost" style="height: @(sevenUpCostHeight)%;"></div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
