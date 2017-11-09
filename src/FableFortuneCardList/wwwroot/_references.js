@@ -1,4 +1,4 @@
-﻿/// <autosync enabled="true" />
+/// <autosync enabled="true" />
 /// <reference path="js/p-loading.js" />
 /// <reference path="js/site.js" />
 /// <reference path="js/user-index.js" />
