@@ -1,0 +1,92 @@
+@model FableFortuneCardList.Models.DeckViewModels.EditDeckViewModel
+@using FableFortuneCardList.Enums
+@using System.IO;
+
+<h3>Available Cards</h3>
+<table class="table" id="AvailableCards">
+    <thead>
+        <tr>
+            <th>
+                Gold
+            </th>
+            <th>
+                Name
+            </th>
+            <th class="mobileHideSmall">
+                Class
+            </th>
+            <th class="mobileHide">
+                Ability
+            </th>
+            <th>
+                Strength
+            </th>
+            <th>
+                Health
+            </th>
+            <th class="mobileHideSmall">
+                Rarity
+            </th>
+            <th class="mobileHideSmall">
+                Type
+            </th>
+            <th></th>
+            <th class="hidden"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.AvailableCards.Where(x => x.Transform == null).Where(x => x.Class == Model.Class || x.Class == ClassType.Neutral || x.Class == ClassType.Trophy).ToList())
+        {
+            <tr>
+                <td class="gold">
+                    @if (item.Transform != null)
+                    {
+                        <text>N/A</text>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.Gold)
+                    }
+                </td>
+                <td>
+                    <a asp-area="" asp-action="Details" asp-controller="Cards" asp-route-id="@System.Net.WebUtility.UrlEncode(item.Name.Trim().Replace(" ", "_"))">@Html.DisplayFor(modelItem => item.Name)</a>
+                </td>
+                <td class="mobileHideSmall">
+                    @Html.DisplayFor(modelItem => item.Class)
+                </td>
+                <td class="mobileHide">
+                    @Html.DisplayFor(modelItem => item.Ability)
+                </td>
+                <td class="strength">
+                    @Html.DisplayFor(modelItem => item.Strength)
+                </td>
+                <td class="health">
+                    @Html.DisplayFor(modelItem => item.Health)
+                </td>
+                <td class="rarity @item.Rarity mobileHideSmall">
+                    <span style="display:none;">@((int)item.Rarity)</span>
+                    @Html.DisplayFor(modelItem => item.Rarity)
+                </td>
+                <td class="mobileHideSmall">
+                    @if (item.Strength > 0 && item.Health > 0)
+                    {
+                        @:Unit
+                                        }
+                    else
+                    {
+                        @:Spell
+                                        }
+                </td>
+                <td>
+                    @await Component.InvokeAsync("DeckAddCardButton", new { deckId = Model.ID, cardId = item.ID })
+                </td>
+
+                <td class="hidden">
+                    <div class="cardTemplateTooltip">
+                        @{Html.RenderPartial("CardView", item);}
+                    </div>
+                </td>
+            </tr>
+                            }
+    </tbody>
+</table>

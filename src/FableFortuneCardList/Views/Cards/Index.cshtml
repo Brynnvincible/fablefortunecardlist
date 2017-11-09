@@ -1,0 +1,189 @@
+@model IEnumerable<FableFortuneCardList.Models.Card>
+@using FableFortuneCardList.Enums;
+@{
+    ViewData["Title"] = "Index";
+}
+
+@inject SignInManager<ApplicationUser> SignInManager
+
+<h1>All Cards</h1>
+
+<h3>Quick Filters</h3>
+<div class="col-md-6">
+    <h4>Classes</h4>
+    <ul class="filterList">
+        @foreach (ClassType classType in Enum.GetValues(typeof(ClassType)))
+        {
+            <li><a href="#@classType.ToString()" class="">@classType.ToString()</a></li>
+        }
+    </ul>
+</div>
+<div class="col-md-6">
+    <h4>Rarity</h4>
+
+    <ul class="filterList">
+        @foreach (RarityType rarityType in Enum.GetValues(typeof(RarityType)))
+        {
+            <li><a href="#@rarityType.ToString()" class="rarity @rarityType.ToString()">@rarityType.ToString()</a></li>
+        }
+    </ul>
+</div>
+<div class="col-md-6">
+    <h4>Ability</h4>
+
+    <ul class="filterList">
+        <li><a href="#BigEntrance">Big Entrance</a></li>
+        <li><a href="#LastLaugh">Last Laugh</a></li>
+        <li><a href="#Deflect">Deflect</a></li>
+        <li><a href="#Morality">Morality</a></li>
+        <li><a href="#Rush">Rush</a></li>
+        <li><a href="#Safeguard">Safeguard</a></li>
+        <li><a href="#Eulogy">Eulogy</a></li>
+    </ul>
+</div>
+<div class="clearfix"></div>
+<div class="panel">
+    <div class="panel-body">
+        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+        {
+            <p>
+                <a asp-action="Create">Create New</a>
+            </p>
+        }
+        <table class="table" id="myTable">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Gold)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th class="mobileHideSmall">
+                        @Html.DisplayNameFor(model => model.Class)
+                    </th>
+                    <th class="mobileHide">
+                        @Html.DisplayNameFor(model => model.Ability)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Strength)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Health)
+                    </th>
+                    <th class="mobileHideSmall">
+                        @Html.DisplayNameFor(model => model.Rarity)
+                    </th>
+                    <th class="mobileHideSmall">
+                        Type
+                    </th>
+
+                    @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    {
+                        <th></th>
+                    }
+                    <th class="hidden"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+            {
+                    <tr>
+                        <td class="gold">
+                            @if (item.Transform != null)
+                            {
+                                <text>N/A</text>
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(modelItem => item.Gold)
+                            }
+                        </td>
+                        <td>
+                            <a asp-area="" asp-action="Details" asp-route-id="@System.Net.WebUtility.UrlEncode(item.Name.Trim().Replace(" ", "_"))">@Html.DisplayFor(modelItem => item.Name)</a>
+                        </td>
+                        <td class="mobileHideSmall">
+                            @Html.DisplayFor(modelItem => item.Class)
+                        </td>
+                        <td class="mobileHide">
+                            @Html.DisplayFor(modelItem => item.Ability)
+                        </td>
+                        <td class="strength">
+                            @Html.DisplayFor(modelItem => item.Strength)
+                        </td>
+                        <td class="health">
+                            @Html.DisplayFor(modelItem => item.Health)
+                        </td>
+                        <td class="rarity @item.Rarity mobileHideSmall">
+                            <span style="display:none;">@((int)item.Rarity)</span>
+                            @Html.DisplayFor(modelItem => item.Rarity)
+                        </td>
+                        <td class="mobileHideSmall">
+                            @if (item.Strength > 0 && item.Health > 0)
+                            {
+                                @:Unit
+                        }
+                            else
+                            {
+                                @:Spell
+                        }
+                        </td>
+                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                        {
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                            </td>
+                        }
+                        <td class="hidden">
+                            <div class="cardTemplateTooltip">
+                                @{Html.RenderPartial("CardView", item);}
+                            </div>
+                        </td>
+
+                    </tr>
+                                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            var table = $("#myTable").DataTable({
+                "colReorder": true,
+                "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                "iDisplayLength": 50,
+                "stateSave": true
+            });
+            var filterLinks = $(".filterList a");
+            var filteredData = filterLinks.click(function () {
+                var filterValue = $(this).html();
+                if (filterValue == "Clear")
+                    table.search("").draw();
+                else {
+                    var currentSearch = table.search();
+                    if (!currentSearch.includes(filterValue))
+                        table.search(currentSearch + " " + filterValue).draw();
+                }
+
+            });
+
+            $(document).tooltip(
+                {
+                    items: "#myTable tbody tr td a",
+                    track: true,
+                    tooltipClass: "cardTemplateTooltip",
+                    content: function () {
+                        var element = $(this).parent().parent().find(".cardTemplateTooltip");
+
+                        return element.html();
+                    }
+                });
+        });
+    </script>
+}
+
+

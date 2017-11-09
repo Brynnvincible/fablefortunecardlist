@@ -1,0 +1,47 @@
+@model FableFortuneCardList.Models.Card
+@using System.IO;
+
+@if (!string.IsNullOrEmpty(Model.ImageUrl))
+{
+<div class="cardImage">
+    <img src="~/images/cards/@(Model.Name.Replace(' ', '_') + ".png")" class="cardImage" />
+</div>
+}else{
+<div class="cardTemplate ui-widget-header">
+    <div class="cardWrapper @Model.TransformType">
+        @if (Model.Transform == null)
+        {
+            <span class="GoldCount">@Model.Gold</span>
+        }
+        <div class="CardName">
+            @if (Model.Transform != null)
+            {
+                <span class="TransformName">@Model.Transform</span>
+            }
+            <span class="CardName">@Model.Name</span>
+        </div>
+        <span class="StrengthCount">@Model.Strength</span>
+        <span class="HealthCount">@Model.Health</span>
+        <span class="AbilityText">
+            @if (Model.Ability != null && Model.Ability.Contains(":"))
+            {
+                <strong>@Model.Ability.Split(':')[0]:</strong>
+                @Model.Ability.Split(':')[1]
+            }
+            else
+            {
+                <text>@Model.Ability</text>
+            }
+        </span>
+        <span class="RarityType @Model.Rarity"></span>
+    </div>
+</div>
+}
+@if (Model.Transforms.Count > 0)
+{
+    @foreach (var transformCard in Model.Transforms)
+    {
+        Html.RenderPartial("CardView", transformCard);
+    }
+}
+

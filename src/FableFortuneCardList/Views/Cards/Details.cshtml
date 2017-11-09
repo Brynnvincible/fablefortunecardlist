@@ -1,0 +1,52 @@
+@model FableFortuneCardList.Models.Card
+
+@{
+    ViewData["Title"] = Model.Name + " Details";
+}
+
+@inject SignInManager<ApplicationUser> SignInManager
+<h1>Card Details</h1>
+
+<div class="panel">
+    <div class="panel-body">
+        <div class="col-md-6">
+            <h2>@Model.Name</h2>
+            <h4>@Model.Class</h4>
+                @{Html.RenderPartial("CardView", Model);}
+            <div class="clearfix"></div>
+            <div>
+                @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+            {
+                    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> @:|
+            }
+                <a asp-action="Index">Back to List</a>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <h2>Decks</h2>
+            <h4>This card appears in:</h4>
+    
+            <ul>
+                @foreach (var deck in Model.DeckCards.Select(x => x.Deck).Distinct().ToList())
+                {
+
+                    <li>
+                        <a href="/Deck/Details/@deck.ID">
+                            <h5 style="display:inline-block; vertical-align: middle; margin: 10px; width: 225px; line-height: 25px;">@deck.Name</h5>
+                            <div style="display:inline-block; vertical-align: middle;">
+                                @{ Html.RenderPartial("DeckGoldSummaryMini", deck);}
+                            </div>
+                        </a>
+                    </li>
+
+
+
+
+
+                                    }
+            </ul>
+
+        </div>
+    </div>
+</div>

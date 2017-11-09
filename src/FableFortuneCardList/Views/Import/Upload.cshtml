@@ -1,0 +1,19 @@
+@{
+    ViewData["Title"] = "Upload";
+}
+
+<h2>Upload XLSX File</h2>
+<div class="panel">
+    <div class="panel-body">
+              
+        <form method="post" asp-action="Upload" asp-controller="Import" enctype="multipart/form-data">
+            <div class="form-group">
+                <input type="file" name="file" />
+            </div>
+            <h4><b>WARNING</b> this will delete all previous records!!</h4>
+            <div class="form-group">
+                <input type="submit" value="Upload" />
+            </div>
+        </form>
+    </div>
+</div>

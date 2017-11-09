@@ -1,0 +1,8 @@
+@model FableFortuneCardList.Models.DeckViewModels.DeckAddCardButtonViewModel
+
+<form asp-action="AddCard">
+    <input type="hidden" name="cardId" value="@Model.CardID" />
+    
+    <input type="submit" value="+" class="btn btn-default addCardBtn loading" @(Model.IsDisabled ? "disabled" : string.Empty) style="font-size:20pt;" />
+</form>
+

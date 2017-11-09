@@ -1,0 +1,62 @@
+@model FableFortuneCardList.Models.Deck
+@using FableFortuneCardList.Enums
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+<div class="panel">
+    <div class="panel-body">
+        <form asp-action="Create">
+            <div class="form-horizontal">
+                <h4>Deck</h4>
+                <hr />
+                @{ // you can put the following in a back-end method and pass through ViewBag
+                    var selectList = Enum.GetValues(typeof(ClassType))
+                                         .Cast<ClassType>()
+                                         .Where(e => e != ClassType.Neutral)
+                                         .Select(e => new SelectListItem
+                                         {
+                                             Value = ((int)e).ToString(),
+                                             Text = e.ToString()
+                                         });
+                }
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+               
+                <div class="form-group">
+                    <label asp-for="Name" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <textarea asp-for="Description" class="form-control" ></textarea>
+                        <span asp-validation-for="Description" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Class" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(x => x.Class, selectList, null, new { @class = "form-control" })
+                        <span asp-validation-for="Class" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Create" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
