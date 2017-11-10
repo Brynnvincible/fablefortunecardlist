@@ -30,7 +30,42 @@ namespace FableFortuneCardList.Data
                 .WithMany(x => x.DeckCards)
                 .HasForeignKey(x => x.DeckId);
             
-            base.OnModelCreating(builder);            
+            base.OnModelCreating(builder);
+
+            builder.Entity<ApplicationRole>()
+                .HasMany(e => e.Claims)
+                .WithOne()
+                .HasForeignKey(e => e.RoleId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<ApplicationRole>()
+                .HasMany(e => e.Users)
+                .WithOne()
+                .HasForeignKey(e => e.RoleId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<ApplicationUser>()
+                .HasMany(e => e.Claims)
+                .WithOne()
+                .HasForeignKey(e => e.UserId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<ApplicationUser>()
+                .HasMany(e => e.Logins)
+                .WithOne()
+                .HasForeignKey(e => e.UserId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<ApplicationUser>()
+                .HasMany(e => e.Roles)
+                .WithOne()
+                .HasForeignKey(e => e.UserId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
         public DbSet<Card> Card { get; set; }

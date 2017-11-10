@@ -1,40 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using FableFortuneCardList.Data;
+using FableFortuneCardList.Models;
+using FableFortuneCardList.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using FableFortuneCardList.Data;
-using FableFortuneCardList.Models;
-using FableFortuneCardList.Services;
+using System;
+using System.Threading.Tasks;
 
 namespace FableFortuneCardList
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
-
-            if (env.IsDevelopment())
-            {
-                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets();
-            }
-
-            builder.AddEnvironmentVariables();
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
 
-        public IConfigurationRoot Configuration { get; }
+        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -51,11 +37,11 @@ namespace FableFortuneCardList
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
-            services.AddTransient<ISmsSender, AuthMessageSender>();
+            services.AddTransient<ISmsSender, AuthMessageSender>();            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -73,7 +59,7 @@ namespace FableFortuneCardList
 
             app.UseStaticFiles();
 
-            app.UseIdentity();
+            app.UseAuthentication();
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
 
@@ -83,6 +69,42 @@ namespace FableFortuneCardList
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            var serviceProvider = app.ApplicationServices.GetService<IServiceProvider>();
+
+            try
+            {
+                await CreateRoles(app);
+            }
+            catch { }
+        }
+
+        private async Task CreateRoles(IApplicationBuilder app)
+        {
+            // adding roles
+            IServiceScopeFactory scopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
+
+            using (IServiceScope scope = scopeFactory.CreateScope())
+            {
+                RoleManager<ApplicationRole> roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+                string[] roleNames = { "Admin", "DeckMaster", "User" };
+                string[] roleDescs = { "Administrative Role", "Deckmaster Role", "User Role" };
+                IdentityResult roleResult;
+
+                for (int x = 0; x < roleNames.Length; x++)
+                {
+                    var roleExist = await roleManager.RoleExistsAsync(roleNames[x]);
+                    if (!roleExist)
+                    {
+                        // create the roles and seed them to the database
+                        ApplicationRole newRole = new ApplicationRole();
+                        newRole.Name = roleNames[x];
+                        newRole.Description = roleDescs[x];
+                        newRole.IPAddress = "localhost";
+                        roleResult = await roleManager.CreateAsync(newRole);
+                    }
+                }
+            }
         }
     }
 }

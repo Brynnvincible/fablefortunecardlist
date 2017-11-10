@@ -17,7 +17,7 @@ namespace FableFortuneCardList.Data.Migrations
                 name: "Class",
                 table: "Card",
                 nullable: false,
-                defaultValue: ClassType.Neutral);
+                defaultValue: (int)ClassType.Neutral);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
