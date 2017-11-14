@@ -1,16 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2006
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3C1A7DD2-65E4-4052-95D3-577F266229EE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7D6BEABE-0223-4B6A-985B-87D765A3B326}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "FableFortuneCardList", "src\FableFortuneCardList\FableFortuneCardList.xproj", "{82D61DFD-CEFB-43A6-BA45-C8E52CAA8584}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FableFortuneCardList", "src\FableFortuneCardList\FableFortuneCardList.csproj", "{82D61DFD-CEFB-43A6-BA45-C8E52CAA8584}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,5 +25,8 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{82D61DFD-CEFB-43A6-BA45-C8E52CAA8584} = {3C1A7DD2-65E4-4052-95D3-577F266229EE}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {361FA711-B00B-43A9-89C2-B7DE62F16BFD}
 	EndGlobalSection
 EndGlobal

@@ -13,7 +13,7 @@ namespace FableFortuneCardList.Data.Migrations
                 name: "Class",
                 table: "Deck",
                 nullable: false,
-                defaultValue: ClassType.Neutral);
+                defaultValue: (int)ClassType.Neutral);
 
             migrationBuilder.AddColumn<string>(
                 name: "ImageUrl",
