@@ -1,0 +1,9 @@
+﻿@model string
+@{
+    ViewData["Title"] = "UploadResult";
+}
+
+<h2>UploadResult</h2>
+<p>@Html.Raw(Model)</p>
+<p><a asp-controller="Import" asp-action="Upload">Return to Upload</a></p>
+<p><a asp-controller="Cards" asp-action="Index">Return to Card List</a></p>

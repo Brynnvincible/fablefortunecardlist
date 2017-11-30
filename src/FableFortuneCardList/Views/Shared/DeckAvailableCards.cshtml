@@ -35,11 +35,11 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.AvailableCards.Where(x => x.Transform == null).Where(x => x.Class == Model.Class || x.Class == ClassType.Neutral || x.Class == ClassType.Trophy).ToList())
+        @foreach (var item in Model.AvailableCards.Where(x => x.Transform == null || x.Transform == string.Empty).Where(x => x.Class == Model.Class || x.Class == ClassType.Neutral || x.Class == ClassType.Trophy).ToList())
         {
             <tr>
                 <td class="gold">
-                    @if (item.Transform != null)
+                    @if (item.Transform != null && item.Transform != string.Empty)
                     {
                         <text>N/A</text>
                     }

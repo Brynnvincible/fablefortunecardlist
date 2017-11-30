@@ -75,7 +75,7 @@
                         @Html.DisplayNameFor(model => model.Rarity)
                     </th>
                     <th class="mobileHideSmall">
-                        Type
+                        @Html.DisplayNameFor(model => model.Type)
                     </th>
 
                     @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
@@ -90,7 +90,7 @@
             {
                     <tr>
                         <td class="gold">
-                            @if (item.Transform != null)
+                            @if (item.Transform != null && item.Transform != string.Empty)
                             {
                                 <text>N/A</text>
                             }
@@ -109,24 +109,23 @@
                             @Html.DisplayFor(modelItem => item.Ability)
                         </td>
                         <td class="strength">
-                            @Html.DisplayFor(modelItem => item.Strength)
+                            @if (item.Health > 0)
+                            {
+                                @Html.DisplayFor(modelItem => item.Strength)
+                            }                            
                         </td>
                         <td class="health">
-                            @Html.DisplayFor(modelItem => item.Health)
+                            @if (item.Health > 0)
+                            {
+                                @Html.DisplayFor(modelItem => item.Health)
+                            }
                         </td>
                         <td class="rarity @item.Rarity mobileHideSmall">
                             <span style="display:none;">@((int)item.Rarity)</span>
                             @Html.DisplayFor(modelItem => item.Rarity)
                         </td>
                         <td class="mobileHideSmall">
-                            @if (item.Strength > 0 && item.Health > 0)
-                            {
-                                @:Unit
-                        }
-                            else
-                            {
-                                @:Spell
-                        }
+                            @Html.DisplayFor(modelItem => item.Type)
                         </td>
                         @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                         {

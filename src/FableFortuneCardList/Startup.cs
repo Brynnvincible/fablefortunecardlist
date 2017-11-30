@@ -1,23 +1,30 @@
 ﻿using FableFortuneCardList.Data;
 using FableFortuneCardList.Models;
 using FableFortuneCardList.Services;
+using FableFortuneCardList.Enums;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace FableFortuneCardList
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private IHostingEnvironment _env;
+
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
+            _env = env;
         }
 
         public IConfiguration Configuration { get; }
@@ -29,15 +36,68 @@ namespace FableFortuneCardList
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, ApplicationRole>()
+            services.AddIdentity<ApplicationUser, ApplicationRole>(
+                o => {
+                    // Allow spaces in Usernames
+                    o.User.AllowedUserNameCharacters += " ";
+                })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 8;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequiredUniqueChars = 0;
+
+                // Lockout settings
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                options.Lockout.MaxFailedAccessAttempts = 10;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // User settings
+                if (_env.IsDevelopment())
+                {                    
+                    options.User.RequireUniqueEmail = false;
+                }
+                else
+                {
+                    options.User.RequireUniqueEmail = true;
+                }
+            });
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                        .AddCookie(cookieOptions => cookieOptions.LoginPath = new PathString("/login"))
+                        .AddFacebook(facebookOptions =>
+                        {
+                            facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+                            facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+                        });
+
             services.AddMvc();
 
+            // Allow large files to be uploaded
+            services.Configure<FormOptions>(x =>
+            {
+                x.ValueLengthLimit = int.MaxValue;
+                x.MultipartBodyLengthLimit = int.MaxValue;
+            });
+
             // Add application services.
-            services.AddTransient<IEmailSender, AuthMessageSender>();
-            services.AddTransient<ISmsSender, AuthMessageSender>();            
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<ISmsSender, AuthMessageSender>();
+            services.Configure<AuthMessageSenderOptions>(Configuration);
+            services.Configure<AuthMessageSenderOptions>(o =>
+            {
+                o.GmailEmailAddress = Configuration["Authentication:Gmail:EmailAddress"];
+                o.GmailEmailPassword = Configuration["Authentication:Gmail:Password"];
+            });
+            
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,8 +120,6 @@ namespace FableFortuneCardList
             app.UseStaticFiles();
 
             app.UseAuthentication();
-
-            // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
 
             app.UseMvc(routes =>
             {
@@ -87,20 +145,20 @@ namespace FableFortuneCardList
             using (IServiceScope scope = scopeFactory.CreateScope())
             {
                 RoleManager<ApplicationRole> roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
-                string[] roleNames = { "Admin", "DeckMaster", "User" };
-                string[] roleDescs = { "Administrative Role", "Deckmaster Role", "User Role" };
                 IdentityResult roleResult;
 
-                for (int x = 0; x < roleNames.Length; x++)
+                foreach (Roles role in Roles.AllRoles)
                 {
-                    var roleExist = await roleManager.RoleExistsAsync(roleNames[x]);
+                    var roleExist = await roleManager.RoleExistsAsync(role.Name);
                     if (!roleExist)
                     {
                         // create the roles and seed them to the database
-                        ApplicationRole newRole = new ApplicationRole();
-                        newRole.Name = roleNames[x];
-                        newRole.Description = roleDescs[x];
-                        newRole.IPAddress = "localhost";
+                        ApplicationRole newRole = new ApplicationRole
+                        {
+                            Name = role.Name,
+                            Description = role.Description,
+                            IPAddress = string.Empty
+                        };                        
                         roleResult = await roleManager.CreateAsync(newRole);
                     }
                 }

@@ -1,19 +1,78 @@
+
 @{
     ViewData["Title"] = "Upload";
 }
 
 <h2>Upload XLSX File</h2>
 <div class="panel">
-    <div class="panel-body">
-              
+    <div class="panel-body">              
         <form method="post" asp-action="Upload" asp-controller="Import" enctype="multipart/form-data">
             <div class="form-group">
-                <input type="file" name="file" />
+                <h4>Upload an Excel spreadsheet containing new or updated cards:</h4>
+                <div class="default-text">                    
+                    <input type="file" name="file" style="padding-left:20px"/>
+                </div>
+                <input type="submit" value="Upload XLSX" style="margin-left:20px; margin-top:5px" />
             </div>
-            <h4><b>WARNING</b> this will delete all previous records!!</h4>
+        </form>
+        <br />
+        <form method="post" asp-action="UploadImages" asp-controller="Import" enctype="multipart/form-data">
             <div class="form-group">
-                <input type="submit" value="Upload" />
+                <h4>Upload a zip file containing image files:</h4>
+                <div class="default-text">
+                    <input type="file" name="file" style="padding-left:20px"/>
+                </div>            
+                <input type="submit" value="Upload Images" style="margin-left:20px; margin-top:5px"/>
+            </div>
+        </form>
+        <br />
+        <form method="post" asp-action="FixSheetIdsAction" asp-controller="Import" enctype="multipart/form-data">
+            <h4>Add missing or repair Sheet IDs for existing cards:</h4>
+            <div class="form-group">
+                <input type="submit" value="Fix Sheet IDs" style="margin-left:20px"/>
+            </div>
+        </form>
+        <br />
+        <form method="post" asp-action="Export" asp-controller="Import" enctype="multipart/form-data">
+            <h4>Download current card data as XLSX file:</h4>
+            <div class="form-group">
+                <input type="submit" value="Export" style="margin-left:20px"/>
+            </div>
+        </form>
+        <br />
+        <form method="post" asp-action="DeleteAllCards" asp-controller="Import" enctype="multipart/form-data">
+            <h4>Delete all cards and decks from the database:</h4>
+            <div class="form-group">
+                <input id="deletecards" type="submit" value="Delete Cards" style="margin-left:20px"/>
+            </div>
+        </form>
+        <br />
+        <form method="post" asp-action="DeleteAllDecks" asp-controller="Import" enctype="multipart/form-data">
+            <h4>Delete all decks from the database:</h4>
+            <div class="form-group">
+                <input id="deletedecks" type="submit" value="Delete Decks" style="margin-left:20px"/>
+            </div>
+        </form>
+        <br />
+        <form method="post" asp-action="CheckImageURLs" asp-controller="Import" enctype="multipart/form-data">
+            <h4>Validate card image URLs</h4>
+            <div class="form-group">
+                <input type="submit" value="Check URLs" style="margin-left:20px"/>
             </div>
         </form>
     </div>
 </div>
+<script type='text/javascript'>
+    document.getElementById("deletedecks").onclick = function () {
+        var confirmation = window.confirm("Are you sure?  All decks will be deleted permanently!"); 
+
+        if (confirmation) { return true; }
+        else { return false; }
+    }
+    document.getElementById("deletecards").onclick = function () {
+        var confirmation = window.confirm("Are you sure?  All cards and decks will be deleted permanently!");
+
+        if (confirmation) { return true; }
+        else { return false; }
+    }
+</script>

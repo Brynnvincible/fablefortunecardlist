@@ -590,6 +590,7 @@ h1,h2,h3,h4{
 
 ul.filterList {
     list-style-type: none;
+    padding-left: 0px;
 }
 
 ul.filterList li{
@@ -604,17 +605,18 @@ ul.filterList li a{
 }
 
 .panel-body h1, .panel-body h2,
-.panel-body h3, .panel-body h4{
-    color:#fff;
-    font-weight:bold;
+.panel-body h3, .panel-body h4 {
+    color: #fff;
+    font-weight: bold;
     text-shadow: none;
-    width:100%;
+    width: 100%;
     text-shadow: 5px 5px 10px rgba(0,0,0,0.9);
+    padding-left: 15px;
 }
 
 .panel-body div a, a{
     color:#f0bf43;
-    text-shadow: 5px 5px 10px rgba(0,0,0,0.9);    
+    text-shadow: 5px 5px 10px rgba(0,0,0,0.9);
 }
 
 .panel-body table a{
@@ -638,6 +640,11 @@ p{
 
 .gold{
     color:#baa700;
+    font-weight:bolder;
+}
+
+.default-text{
+    color: #ffffff;
     font-weight:bolder;
 }
 

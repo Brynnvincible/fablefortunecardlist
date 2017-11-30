@@ -90,7 +90,7 @@ namespace FableFortuneCardList.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteApplicationRole(string id, FormCollection form)
+        public async Task<IActionResult> DeleteApplicationRole(string id, IFormCollection form)
         {
             if (!String.IsNullOrEmpty(id))
             {

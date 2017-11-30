@@ -30,6 +30,8 @@ namespace FableFortuneCardList.Models
         public string TransformType { get; set; }
         public string Type { get; set; }
         public string ImageUrl { get; set; }
+        public string UnitClass { get; set; }
+        public int SheetId { get; set; }
         public ICollection<DeckCard> DeckCards { get; set; }
         [NotMapped]
         public ICollection<Card> Transforms { get; set; }

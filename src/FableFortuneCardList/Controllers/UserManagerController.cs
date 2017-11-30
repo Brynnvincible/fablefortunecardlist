@@ -35,7 +35,7 @@ namespace FableFortuneCardList.Controllers
                 UserName = u.UserName,
                 Email = u.Email,
                 RoleName = roleManager.Roles.Single(x => x.Id == u.Roles.Single().RoleId).Name
-        }).ToList();
+            }).ToList();
             return View(model);
         }
 
@@ -155,7 +155,7 @@ namespace FableFortuneCardList.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteUser(string id, FormCollection form)
+        public async Task<IActionResult> DeleteUser(string id, IFormCollection form)
         {
             if (!String.IsNullOrEmpty(id))
             {

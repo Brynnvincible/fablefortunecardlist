@@ -47,6 +47,7 @@ namespace FableFortuneCardList.Controllers
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+                : message == ManageMessageId.VerificationEmailSent ? "Verification email sent. Please check your email."
                 : "";
 
             var user = await GetCurrentUserAsync();
@@ -56,6 +57,9 @@ namespace FableFortuneCardList.Controllers
             }
             var model = new IndexViewModel
             {
+                UserName = await _userManager.GetUserNameAsync(user),
+                Email = await _userManager.GetEmailAsync(user),
+                IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user),
                 HasPassword = await _userManager.HasPasswordAsync(user),
                 PhoneNumber = await _userManager.GetPhoneNumberAsync(user),
                 TwoFactor = await _userManager.GetTwoFactorEnabledAsync(user),
@@ -83,6 +87,29 @@ namespace FableFortuneCardList.Controllers
                 }
             }
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SendVerificationEmail(IndexViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+            var email = user.Email;
+            await _emailSender.SendEmailConfirmationAsync(email, callbackUrl);
+            
+            return RedirectToAction(nameof(ManageLogins), new { Message = ManageMessageId.VerificationEmailSent });
         }
 
         //
@@ -348,7 +375,8 @@ namespace FableFortuneCardList.Controllers
             SetPasswordSuccess,
             RemoveLoginSuccess,
             RemovePhoneSuccess,
-            Error
+            Error,
+            VerificationEmailSent
         }
 
         private Task<ApplicationUser> GetCurrentUserAsync()
