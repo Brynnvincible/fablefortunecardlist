@@ -9,12 +9,12 @@
 }else{
 <div class="cardTemplate ui-widget-header">
     <div class="cardWrapper @Model.TransformType">
-        @if (Model.Transform == null)
+        @if (Model.Transform == null || Model.Transform == string.Empty)
         {
             <span class="GoldCount">@Model.Gold</span>
         }
         <div class="CardName">
-            @if (Model.Transform != null)
+            @if (Model.Transform != null && Model.Transform != string.Empty)
             {
                 <span class="TransformName">@Model.Transform</span>
             }

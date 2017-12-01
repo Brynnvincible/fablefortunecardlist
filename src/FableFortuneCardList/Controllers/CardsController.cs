@@ -28,7 +28,7 @@ namespace FableFortuneCardList.Controllers
         {
             List<Card> cardList = _context.Card.ToList();
 
-            var transformCards = cardList.Where(c => c.Transform != null).ToList();
+            var transformCards = cardList.Where(c => c.Transform != null && c.Transform != string.Empty).ToList();
 
             foreach(var childCard in transformCards)
             {

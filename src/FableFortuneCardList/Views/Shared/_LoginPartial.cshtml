@@ -10,7 +10,8 @@
         <ul class="nav navbar-nav navbar-right">
             @if (User.IsInRole("Admin"))
             {
-            <li><a asp-area="" asp-controller="UserManager" asp-action="Index">User Manager</a></li>            
+                <li><a asp-area="" asp-controller="Import" asp-action="Upload">Upload</a></li>
+                <li><a asp-area="" asp-controller="UserManager" asp-action="Index">User Manager</a></li>            
             }
             <li>
                 <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
