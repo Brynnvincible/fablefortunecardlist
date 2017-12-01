@@ -748,3 +748,7 @@ textarea {
     display: none
   }
 }
+
+.hidden {
+    display: none;
+}

@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using FableFortuneCardList.Enums;
 using FableFortuneCardList.Models.DeckViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FableFortuneCardList.Controllers
 {
@@ -19,12 +20,41 @@ namespace FableFortuneCardList.Controllers
         private readonly ApplicationDbContext _context;
         private IHostingEnvironment _environment;
         private UserManager<ApplicationUser> _userManager;
-        
+        private IEnumerable<SelectListItem> _classList;
+        private IEnumerable<SelectListItem> _deckTypeList;
+        private IEnumerable<SelectListItem> _arenaCoopList;
+        private IEnumerable<SelectListItem> _arenaPVPList;
+
         public DeckController(ApplicationDbContext context, IHostingEnvironment environment, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _environment = environment;
             _userManager = userManager;
+
+            // Expose Enums to views
+            _classList = Enum.GetValues(typeof(ClassType)).Cast<ClassType>().Where(e => e != ClassType.Neutral).Select(e => new SelectListItem
+            {
+                Value = ((int)e).ToString(),
+                Text = e.ToString()
+            });
+
+            _deckTypeList = Enum.GetValues(typeof(DeckType)).Cast<DeckType>().Where(e => e != DeckType.None).Select(e => new SelectListItem
+            {
+                Value = ((int)e).ToString(),
+                Text = e.ToString()
+            });
+
+            _arenaCoopList = Enum.GetValues(typeof(DeckArenaCoop)).Cast<DeckArenaCoop>().Where(e => e != DeckArenaCoop.None).Select(e => new SelectListItem
+            {
+                Value = ((int)e).ToString(),
+                Text = e.ToString()
+            });
+
+            _arenaPVPList = Enum.GetValues(typeof(DeckArenaPVP)).Cast<DeckArenaPVP>().Where(e => e != DeckArenaPVP.None).Select(e => new SelectListItem
+            {
+                Value = ((int)e).ToString(),
+                Text = e.ToString()
+            });
         }
                   
         public IActionResult Index()
@@ -111,13 +141,18 @@ namespace FableFortuneCardList.Controllers
         {
             var deck = new Deck();
 
+            ViewBag.ClassList = _classList;
+            ViewBag.DeckTypeList = _deckTypeList;
+            ViewBag.DeckArenaCoop = _arenaCoopList;
+            ViewBag.DeckArenaPVP = _arenaPVPList;
+
             return View(deck);
         }
 
         [Authorize(Roles = "DeckMaster, Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID, Name, Description, Class")]Deck deck)
+        public async Task<IActionResult> Create([Bind("ID, Name, Description, Type, ArenaCoop, ArenaPVP, Class")]Deck deck)
         {
             deck.CreatedBy = await _userManager.GetUserAsync(User);
 
@@ -125,6 +160,14 @@ namespace FableFortuneCardList.Controllers
 
             if (ModelState.IsValid)
             {
+                if (deck.Type == DeckType.Coop)
+                {
+                    deck.ArenaPVP = DeckArenaPVP.None;
+                }
+                else if (deck.Type == DeckType.PVP)
+                {
+                    deck.ArenaCoop = DeckArenaCoop.None;
+                }
                 _context.Add(deck);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Edit", new { Id = deck.ID });
@@ -146,17 +189,26 @@ namespace FableFortuneCardList.Controllers
             viewModel.AvailableCards = _context.Card.ToList();
 
             var deck = await _context.Deck.Include(x=>x.DeckCards).SingleOrDefaultAsync(m => m.ID == id);
-            
-            viewModel.ID = deck.ID;
-            viewModel.Deck = deck;
-            viewModel.Name = deck.Name;
-            viewModel.Description = deck.Description;
-            viewModel.Class = deck.Class;
 
             if (deck == null)
             {
                 return NotFound();
             }
+
+            viewModel.ID = deck.ID;
+            viewModel.Deck = deck;
+            viewModel.Name = deck.Name;
+            viewModel.Description = deck.Description;
+            viewModel.Type = deck.Type;
+            viewModel.ArenaCoop = deck.ArenaCoop;
+            viewModel.ArenaPVP = deck.ArenaPVP;
+            viewModel.Class = deck.Class;
+
+            ViewBag.ClassList = _classList;
+            ViewBag.DeckTypeList = _deckTypeList;
+            ViewBag.DeckArenaCoop = _arenaCoopList;
+            ViewBag.DeckArenaPVP = _arenaPVPList;
+
             return View(viewModel);
         }
 
@@ -165,7 +217,7 @@ namespace FableFortuneCardList.Controllers
         [Authorize(Roles = "DeckMaster, Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID, Name, Description, Class")] Deck deck)
+        public async Task<IActionResult> Edit(int id, [Bind("ID, Name, Description, Type, ArenaCoop, ArenaPVP, Class")] Deck deck)
         {
             if (id != deck.ID)
             {
@@ -176,6 +228,14 @@ namespace FableFortuneCardList.Controllers
 
             if (ModelState.IsValid)
             {
+                if (deck.Type == DeckType.Coop)
+                {
+                    deck.ArenaPVP = DeckArenaPVP.None;
+                }
+                else if (deck.Type == DeckType.PVP)
+                {
+                    deck.ArenaCoop = DeckArenaCoop.None;
+                }
                 try
                 {
                     _context.Update(deck);

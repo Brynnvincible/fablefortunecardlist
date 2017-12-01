@@ -13,16 +13,6 @@
                     <div class="form-horizontal">
                         <h4>Deck</h4>
                         <hr />
-                        @{ // you can put the following in a back-end method and pass through ViewBag
-                            var selectList = Enum.GetValues(typeof(ClassType))
-                                                 .Cast<ClassType>()
-                                                 .Where(e => e != ClassType.Neutral)
-                                                 .Select(e => new SelectListItem
-                                                 {
-                                                     Value = ((int)e).ToString(),
-                                                     Text = e.ToString()
-                                                 });
-                        }
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <input type="hidden" asp-for="ID" />
                         <div class="form-group">
@@ -40,9 +30,30 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label asp-for="Type" class="col-md-2 control-label"></label>
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(x => x.Type, (IEnumerable<SelectListItem>)ViewBag.DeckTypeList, null, new { @class = "form-control", onchange = "SetArenaType(this)", id = "ddDeckType" })
+                                <span asp-validation-for="Type" class="text-danger" />
+                            </div>
+                        </div>
+                        <div id="deckArenaCoopDiv" class="form-group hidden">
+                            <label asp-for="ArenaCoop" class="col-md-2 control-label"></label>
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(x => x.ArenaCoop, (IEnumerable<SelectListItem>)ViewBag.DeckArenaCoop, null, new { @class = "form-control", onload = "SetCoopArenaOnLoad()" })
+                                <span asp-validation-for="ArenaCoop" class="text-danger" />
+                            </div>
+                        </div>
+                        <div id="deckArenaPVPDiv" class="form-group hidden">
+                            <label asp-for="ArenaPVP" class="col-md-2 control-label"></label>
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(x => x.ArenaPVP, (IEnumerable<SelectListItem>)ViewBag.DeckArenaPVP, null, new { @class = "form-control", onload = "SetPVPArenaOnLoad()" })
+                                <span asp-validation-for="ArenaPVP" class="text-danger" />
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label asp-for="Class" class="col-md-2 control-label"></label>
                             <div class="col-md-10">
-                                @Html.DropDownListFor(x=>x.Class, selectList, null, new { @class="form-control"})
+                                @Html.DropDownListFor(x=>x.Class, (IEnumerable<SelectListItem>)ViewBag.ClassList, null, new { @class="form-control"})
                                 <span asp-validation-for="Class" class="text-danger" />
                             </div>
                         </div>
@@ -125,11 +136,10 @@
 
                     return element.html();
                 }
-            });        
+            });
         }
 
         function bindTableTooltips(){
-           
             $(document).tooltip({
                 items: "#AvailableCards tbody tr td a",
                 track: true,
@@ -139,7 +149,7 @@
 
                     return element.html();
                 }
-            });        
+            });
         }
 
         function loadAvailableCards(){
@@ -184,7 +194,7 @@
                     success: function (html) {
                         $("#DeckCardSummary").html(html);
                         bindSummaryTooltips();
-                        bindRemoveButtons();                        
+                        bindRemoveButtons();
                         reloadDeckGoldSummary();
                         loadAvailableCards();
                     }
@@ -198,7 +208,7 @@
             $(".removeCardBtn").click(function (event) {
                 var removeButton = $(this);
                 var deckCardId = removeButton.parent().find("input[name='deckCardId']").val();
-                
+
                 $("#AvailableCardsTable").ploading({action:'show'});
                 var data = {'deckCardId':deckCardId}
                 $.ajax({
@@ -218,6 +228,20 @@
             });
         }
 
+        function SetArenaType(sel) {
+            if (sel.options[sel.value - 1].text == 'Coop') {
+                $('#deckArenaPVPDiv').addClass('hidden')
+                if ($('#deckArenaCoopDiv').hasClass('hidden')) {
+                    $('#deckArenaCoopDiv').removeClass('hidden')
+                }
+            } else if (sel.options[sel.value - 1].text == 'PVP') {
+                $('#deckArenaCoopDiv').addClass('hidden')
+                if ($('#deckArenaPVPDiv').hasClass('hidden')) {
+                    $('#deckArenaPVPDiv').removeClass('hidden')
+                }
+            }
+        }
+
         $(document).ready(function () {
             bindAddButtons();
             bindRemoveButtons();
@@ -235,6 +259,13 @@
                         table.search(currentSearch + " " + filterValue).draw();
                 }
             });
+
+            sel = document.getElementById("ddDeckType");
+            if (sel.options[sel.selectedIndex].text == 'Coop') {
+                $('#deckArenaCoopDiv').removeClass('hidden')
+            } else if (sel.options[sel.selectedIndex].text == 'PVP') {
+                $('#deckArenaPVPDiv').removeClass('hidden')                
+            }
         });
     </script>
 }
