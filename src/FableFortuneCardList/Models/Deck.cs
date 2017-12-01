@@ -1,6 +1,7 @@
 ﻿using FableFortuneCardList.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -17,6 +18,12 @@ namespace FableFortuneCardList.Models
         [Required]
         public ClassType Class { get; set; }
         public string Description { get; set; }
+        public DeckType Type { get; set; }
+        [DisplayName("Arena")]
+        public DeckArenaPVP ArenaPVP { get; set; }
+        [DisplayName("Arena")]
+        public DeckArenaCoop ArenaCoop { get; set; }
+        public bool Completed { get; set; }
         public ICollection<DeckCard> DeckCards { get; set; }
         [Required]
         public ApplicationUser CreatedBy { get; set; } 
