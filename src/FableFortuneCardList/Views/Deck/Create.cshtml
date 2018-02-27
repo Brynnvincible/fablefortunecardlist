@@ -24,7 +24,7 @@
                 <div class="form-group">
                     <label asp-for="Description" class="col-md-2 control-label"></label>
                     <div class="col-md-10">
-                        <textarea asp-for="Description" class="form-control" ></textarea>
+                        <textarea asp-for="Description" class="form-control" maxlength="190" ></textarea>
                         <span asp-validation-for="Description" class="text-danger" />
                     </div>
                 </div>
@@ -54,6 +54,13 @@
                     <div class="col-md-10">
                         @Html.DropDownListFor(x => x.Class, (IEnumerable<SelectListItem>)ViewBag.ClassList, null, new { @class = "form-control" })
                         <span asp-validation-for="Class" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Strategy" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <textarea asp-for="Strategy" class="wide-input form-control"></textarea>
+                        <span asp-validation-for="Strategy" class="text-danger" />
                     </div>
                 </div>
                 <div class="form-group">

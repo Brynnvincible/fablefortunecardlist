@@ -29,6 +29,18 @@ namespace FableFortuneCardList.Data
                 .HasOne(x => x.Deck)
                 .WithMany(x => x.DeckCards)
                 .HasForeignKey(x => x.DeckId);
+
+            builder.Entity<DeckRanking>().HasKey(x => new { x.Id });
+
+            builder.Entity<DeckRanking>()
+                .HasOne(x => x.Deck)
+                .WithMany(x => x.DeckRankings)
+                .HasForeignKey(x => x.DeckID);
+
+            builder.Entity<DeckRanking>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.DeckRankings)
+                .HasForeignKey(x => x.UserID);
             
             base.OnModelCreating(builder);
 
@@ -77,5 +89,7 @@ namespace FableFortuneCardList.Data
         public DbSet<Comment> Comment { get; set; }
 
         public DbSet<CommentThread> CommentThread { get; set; }
+
+        public DbSet<DeckRanking> DeckRanking { get; set; }
     }
 }

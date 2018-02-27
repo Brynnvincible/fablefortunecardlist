@@ -94,6 +94,19 @@ table.dataTable tr td{
     vertical-align:middle;
 }
 
+.wide-input {
+    max-width:98%;
+    min-height: 150px; 
+}
+
+.gold-summary {
+    min-width: 420px;
+}
+
+.top-margin {
+    margin-top:4px;
+}
+
 .panel{
 border: none;
     background-color: #efddba;
@@ -105,7 +118,6 @@ border: none;
 .cardTemplateTooltip{
     position:absolute;
     display:inline-block;
-    border:none;
     background:none !important;
     background-image:none !important;
     border:none !important;
@@ -534,7 +546,6 @@ div.cardTemplate span.AbilityText{
     font-size:12pt;
     color: #fff;
     font-weight:normal;
-    vertical-align: bottom;
     text-shadow:0 0 3px #000;
 }
 
@@ -751,4 +762,29 @@ textarea {
 
 .hidden {
     display: none;
+}
+
+/* Vote Buttons */
+.vote-button {
+    font-size: 20px;
+}
+
+.vote-button-voted {
+    color: gold !important;
+}
+
+.vote-button-not-voted {
+    color: grey !important;
+}
+
+.link-disabled {
+    cursor: text;
+}
+
+.image-rotate {
+    transform: rotate(180deg);
+}
+
+.created-by {
+    min-width: 80px;
 }

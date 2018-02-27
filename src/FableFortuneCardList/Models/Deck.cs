@@ -18,6 +18,7 @@ namespace FableFortuneCardList.Models
         [Required]
         public ClassType Class { get; set; }
         public string Description { get; set; }
+        public string Strategy { get; set; }
         public DeckType Type { get; set; }
         [DisplayName("Arena")]
         public DeckArenaPVP ArenaPVP { get; set; }
@@ -25,12 +26,14 @@ namespace FableFortuneCardList.Models
         public DeckArenaCoop ArenaCoop { get; set; }
         public bool Completed { get; set; }
         public ICollection<DeckCard> DeckCards { get; set; }
+        public ICollection<DeckRanking> DeckRankings { get; set; }
         [Required]
         public ApplicationUser CreatedBy { get; set; } 
         
         public Deck()
         {
             this.DeckCards = new HashSet<DeckCard>();
+            this.DeckRankings = new HashSet<DeckRanking>();
         }
     }
 }
