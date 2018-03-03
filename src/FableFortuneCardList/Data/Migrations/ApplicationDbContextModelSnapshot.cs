@@ -18,7 +18,7 @@ namespace FableFortuneCardList.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.0-rtm-26452")
+                .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("FableFortuneCardList.Models.ApplicationRole", b =>
@@ -111,7 +111,11 @@ namespace FableFortuneCardList.Data.Migrations
 
                     b.Property<string>("Ability");
 
+                    b.Property<string>("Associated");
+
                     b.Property<int>("Class");
+
+                    b.Property<int>("Evolves");
 
                     b.Property<int>("Gold");
 
@@ -204,6 +208,8 @@ namespace FableFortuneCardList.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
+                    b.Property<string>("Strategy");
+
                     b.Property<int>("Type");
 
                     b.HasKey("ID");
@@ -229,6 +235,26 @@ namespace FableFortuneCardList.Data.Migrations
                     b.HasIndex("DeckId");
 
                     b.ToTable("DeckCard");
+                });
+
+            modelBuilder.Entity("FableFortuneCardList.Models.DeckRanking", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("DeckID");
+
+                    b.Property<int>("Ranking");
+
+                    b.Property<string>("UserID");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeckID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("DeckRanking");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -349,6 +375,18 @@ namespace FableFortuneCardList.Data.Migrations
                         .WithMany("DeckCards")
                         .HasForeignKey("DeckId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("FableFortuneCardList.Models.DeckRanking", b =>
+                {
+                    b.HasOne("FableFortuneCardList.Models.Deck", "Deck")
+                        .WithMany("DeckRankings")
+                        .HasForeignKey("DeckID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("FableFortuneCardList.Models.ApplicationUser", "User")
+                        .WithMany("DeckRankings")
+                        .HasForeignKey("UserID");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

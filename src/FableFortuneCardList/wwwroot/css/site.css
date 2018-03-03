@@ -76,7 +76,10 @@ table.dataTable tbody tr {
     background-color: #a89167;
     border-radius: 8px;
     box-shadow: 0px 0px 10px rgba(0,0,0,0.8);
-    padding: 12px;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    padding-left: 25px;
+    padding-right: 20px;
     background-image: url(/images/Large_ET-191.png);
     background-position: center;
 
@@ -94,6 +97,19 @@ table.dataTable tr td{
     vertical-align:middle;
 }
 
+.wide-input {
+    max-width:98%;
+    min-height: 150px; 
+}
+
+.gold-summary {
+    min-width: 420px;
+}
+
+.top-margin {
+    margin-top:4px;
+}
+
 .panel{
 border: none;
     background-color: #efddba;
@@ -105,7 +121,6 @@ border: none;
 .cardTemplateTooltip{
     position:absolute;
     display:inline-block;
-    border:none;
     background:none !important;
     background-image:none !important;
     border:none !important;
@@ -534,7 +549,6 @@ div.cardTemplate span.AbilityText{
     font-size:12pt;
     color: #fff;
     font-weight:normal;
-    vertical-align: bottom;
     text-shadow:0 0 3px #000;
 }
 
@@ -696,7 +710,7 @@ ul.filterList .rarity.Basic{
 }
 
 .ui-tooltip-content{
-    width:700px;
+    width:1000px;
 }
 
 .ui-widget-header input, .ui-widget-header select{
@@ -752,3 +766,41 @@ textarea {
 .hidden {
     display: none;
 }
+
+/* Vote Buttons */
+.vote-button {
+    font-size: 20px;
+}
+
+.vote-button-voted {
+    color: gold !important;
+}
+
+.vote-button-not-voted {
+    color: grey !important;
+}
+
+.link-disabled {
+    cursor: text;
+}
+
+.image-rotate {
+    transform: rotate(180deg);
+}
+
+.created-by {
+    min-width: 80px;
+}
+
+.transparent-png {
+    background-color: transparent;
+    border: none;
+    max-width: 100%;
+    text-align: right;
+    height: 130px;
+}
+
+.hero-text {
+    min-height: 130px;
+}
+

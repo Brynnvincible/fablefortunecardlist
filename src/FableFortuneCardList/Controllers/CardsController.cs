@@ -10,6 +10,8 @@ using FableFortuneCardList.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using FableFortuneCardList.Shared;
+
 namespace FableFortuneCardList.Controllers
 {
     public class CardsController : Controller
@@ -26,7 +28,8 @@ namespace FableFortuneCardList.Controllers
         // GET: Cards
         public async Task<IActionResult> Index()
         {
-            List<Card> cardList = _context.Card.ToList();
+            bool updated = false;
+            List<Card> cardList = _context.Card.Where(x => x.Class != Enums.ClassType.None).ToList();
 
             var transformCards = cardList.Where(c => c.Transform != null && c.Transform != string.Empty).ToList();
 
@@ -41,15 +44,19 @@ namespace FableFortuneCardList.Controllers
             foreach(var card in cardList.Where(x=> string.IsNullOrEmpty(x.ImageUrl)))
             {
                 var filePath = Path.Combine(_environment.WebRootPath,
-                        "images", "cards", card.Name.Replace(' ', '_') + ".png");
+                        "images", "cards", ValidateCardImageURL.GetCardImageURL(card.Name));
 
                 if (System.IO.File.Exists(filePath))
                 {
                     card.ImageUrl = filePath;
-                    _context.Card.Update(card);                    
+                    _context.Card.Update(card);
+                    updated = true;
                 }
             }
-            _context.SaveChanges();
+            if (updated)
+            {
+                _context.SaveChanges();
+            }
 
             return View(cardList);
         }
@@ -68,6 +75,7 @@ namespace FableFortuneCardList.Controllers
                 return NotFound();
             }
 
+            id = Uri.UnescapeDataString(id);
             var name = id.Replace("_", " ");
 
             var card = await _context.Card.Include(x => x.DeckCards).ThenInclude(x => x.Deck).ThenInclude(x=>x.DeckCards).ThenInclude(x=>x.Card).SingleOrDefaultAsync(m => m.Name == name);
@@ -77,6 +85,24 @@ namespace FableFortuneCardList.Controllers
             if (card == null)
             {
                 return NotFound();
+            }
+
+            if (card.Associated != string.Empty && card.Associated != null)
+            {
+                IEnumerable<int> assIDs = Card.StringToIntList(card.Associated);
+                foreach (int assID in assIDs)
+                {
+                    Card assCard = _context.Card.First(x => x.SheetId == assID);
+                    if(assCard.TransformType == "Transforming Unit")
+                    {
+                        // Add transforms
+                        foreach(Card transCard in _context.Card.Where(x => x.Transform == assCard.Name))
+                        {
+                            assCard.Transforms.Add(transCard);
+                        }
+                    }
+                    card.AssociatedCards.Add(assCard);
+                }
             }
 
             return View(card);

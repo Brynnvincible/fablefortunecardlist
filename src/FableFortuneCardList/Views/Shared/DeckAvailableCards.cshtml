@@ -35,7 +35,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.AvailableCards.Where(x => x.Transform == null || x.Transform == string.Empty).Where(x => x.Class == Model.Class || x.Class == ClassType.Neutral || x.Class == ClassType.Trophy).ToList())
+        @foreach (var item in Model.AvailableCards.Where(x => x.Transform == null || x.Transform == string.Empty).Where(x => x.Class == Model.Class || x.Class == ClassType.Neutral || x.Class == ClassType.Trophy).Where(x => x.Type != "Token").ToList())
         {
             <tr>
                 <td class="gold">
@@ -58,24 +58,23 @@
                     @Html.DisplayFor(modelItem => item.Ability)
                 </td>
                 <td class="strength">
-                    @Html.DisplayFor(modelItem => item.Strength)
+                    @if (item.Health > 0)
+                    {
+                        @Html.DisplayFor(modelItem => item.Strength)
+                    }                    
                 </td>
                 <td class="health">
-                    @Html.DisplayFor(modelItem => item.Health)
+                    @if (item.Health > 0)
+                    {
+                        @Html.DisplayFor(modelItem => item.Health)
+                    }
                 </td>
                 <td class="rarity @item.Rarity mobileHideSmall">
                     <span style="display:none;">@((int)item.Rarity)</span>
                     @Html.DisplayFor(modelItem => item.Rarity)
                 </td>
                 <td class="mobileHideSmall">
-                    @if (item.Strength > 0 && item.Health > 0)
-                    {
-                        @:Unit
-                                        }
-                    else
-                    {
-                        @:Spell
-                                        }
+                    @Html.DisplayFor(modelItem => item.Type)
                 </td>
                 <td>
                     @await Component.InvokeAsync("DeckAddCardButton", new { deckId = Model.ID, cardId = item.ID })

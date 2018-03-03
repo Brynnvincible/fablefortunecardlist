@@ -12,52 +12,59 @@
             <div class="form-horizontal">
                 <h4>Deck</h4>
                 <hr />
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-               
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>              
+
                 <div class="form-group">
-                    <label asp-for="Name" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
+                    <label asp-for="Name" class="col-md-1 control-label"></label>
+                    <div class="col-md-11">
                         <input asp-for="Name" class="form-control" />
                         <span asp-validation-for="Name" class="text-danger" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Description" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                        <textarea asp-for="Description" class="form-control" ></textarea>
+                    <label asp-for="Description" class="col-md-1 control-label"></label>
+                    <div class="col-md-11">
+                        <textarea asp-for="Description" class="form-control" maxlength="190" ></textarea>
                         <span asp-validation-for="Description" class="text-danger" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Type" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">                        
+                    <label asp-for="Type" class="col-md-1 control-label"></label>
+                    <div class="col-md-11">                        
                         @Html.DropDownListFor(x => x.Type, (IEnumerable<SelectListItem>)ViewBag.DeckTypeList, null, new { @class = "form-control", onchange = "SetArenaType(this)" })
                         <span asp-validation-for="Type" class="text-danger" />
                     </div>
                 </div>
                 <div id="deckArenaCoopDiv" class="form-group">
-                    <label asp-for="ArenaCoop" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
+                    <label asp-for="ArenaCoop" class="col-md-1 control-label"></label>
+                    <div class="col-md-11">
                         @Html.DropDownListFor(x => x.ArenaCoop, (IEnumerable<SelectListItem>)ViewBag.DeckArenaCoop, null, new { @class = "form-control" })
                         <span asp-validation-for="ArenaCoop" class="text-danger" />
                     </div>
                 </div>
                 <div id="deckArenaPVPDiv" class="form-group hidden">
-                    <label asp-for="ArenaPVP" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
+                    <label asp-for="ArenaPVP" class="col-md-1 control-label"></label>
+                    <div class="col-md-11">
                         @Html.DropDownListFor(x => x.ArenaPVP, (IEnumerable<SelectListItem>)ViewBag.DeckArenaPVP, null, new { @class = "form-control" })
                         <span asp-validation-for="ArenaPVP" class="text-danger" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Class" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
+                    <label asp-for="Class" class="col-md-1 control-label"></label>
+                    <div class="col-md-11">
                         @Html.DropDownListFor(x => x.Class, (IEnumerable<SelectListItem>)ViewBag.ClassList, null, new { @class = "form-control" })
                         <span asp-validation-for="Class" class="text-danger" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
+                    <label asp-for="Strategy" class="col-md-1 control-label"></label>
+                    <div class="col-md-11">
+                        <textarea asp-for="Strategy" class="wide-input form-control"></textarea>
+                        <span asp-validation-for="Strategy" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-1 col-md-11">
                         <input type="submit" value="Create" class="btn btn-default" />
                     </div>
                 </div>

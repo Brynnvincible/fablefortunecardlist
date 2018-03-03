@@ -35,6 +35,7 @@
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Cards" asp-action="Index">Cards</a></li>
                     <li><a asp-area="" asp-controller="Deck" asp-action="Index">Decks</a></li>
+                    <li><a asp-area="" asp-controller="Encyclopedia" asp-action="Index">Encyclopedia</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
@@ -45,7 +46,9 @@
         <footer>
             <p>Fan site developed by <a href="http://twitch.tv/majorpest">MajorPest</a> and <a href="http://twitch.tv/brynnvincible">Brynnvincible</a></p>
 
-            <p>Fable Fortune &copy; 2017 - <a href="http://flamingfowl.com/">Flaming Fowl Studios</a></p>
+            <p>Fable Fortune &copy; 2017 - <a href="http://flamingfowl.com/">Flaming Fowl Studios</a> and <a href="http://www.mediatonicgames.com/">Mediatonic</a></p>
+
+            <p>We do not collect any data or share information with third-parties.  See our <a asp-controller="Home" asp-action="PrivacyAndToS">Privacy Policy and ToS</a> for more information.</p>
         </footer>
     </div>
 

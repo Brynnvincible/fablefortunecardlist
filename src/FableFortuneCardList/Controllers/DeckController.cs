@@ -32,7 +32,7 @@ namespace FableFortuneCardList.Controllers
             _userManager = userManager;
 
             // Expose Enums to views
-            _classList = Enum.GetValues(typeof(ClassType)).Cast<ClassType>().Where(e => e != ClassType.Neutral).Select(e => new SelectListItem
+            _classList = Enum.GetValues(typeof(ClassType)).Cast<ClassType>().Where(e => e != ClassType.Neutral && e != ClassType.Trophy && e != ClassType.Quest).Select(e => new SelectListItem
             {
                 Value = ((int)e).ToString(),
                 Text = e.ToString()
@@ -57,10 +57,15 @@ namespace FableFortuneCardList.Controllers
             });
         }
                   
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            List<Deck> deckList = _context.Deck.Include(x=>x.CreatedBy).Include(x=>x.DeckCards).ThenInclude(x=>x.Card).ToList();
+            List<Deck> deckList = _context.Deck.Include(x=>x.CreatedBy).Include(x=>x.DeckCards).ThenInclude(x=>x.Card).Include(x=>x.DeckRankings).ToList();
 
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                ViewData["currentUserId"] = user.Id;
+            }
             return View(deckList);
         }
 
@@ -99,7 +104,6 @@ namespace FableFortuneCardList.Controllers
         }
 
         [HttpPost]
-
         [Authorize(Roles = "DeckMaster, Admin")]
         public async Task<IActionResult> AddCard(int deckId, int cardId)
         {
@@ -152,7 +156,7 @@ namespace FableFortuneCardList.Controllers
         [Authorize(Roles = "DeckMaster, Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID, Name, Description, Type, ArenaCoop, ArenaPVP, Class")]Deck deck)
+        public async Task<IActionResult> Create([Bind("ID, Name, Description, Strategy, Type, ArenaCoop, ArenaPVP, Class")]Deck deck)
         {
             deck.CreatedBy = await _userManager.GetUserAsync(User);
 
@@ -168,6 +172,7 @@ namespace FableFortuneCardList.Controllers
                 {
                     deck.ArenaCoop = DeckArenaCoop.None;
                 }
+                deck.Strategy = deck.Strategy.Replace("<", "").Replace(">", "");
                 _context.Add(deck);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Edit", new { Id = deck.ID });
@@ -199,6 +204,7 @@ namespace FableFortuneCardList.Controllers
             viewModel.Deck = deck;
             viewModel.Name = deck.Name;
             viewModel.Description = deck.Description;
+            viewModel.Strategy = deck.Strategy;
             viewModel.Type = deck.Type;
             viewModel.ArenaCoop = deck.ArenaCoop;
             viewModel.ArenaPVP = deck.ArenaPVP;
@@ -217,7 +223,7 @@ namespace FableFortuneCardList.Controllers
         [Authorize(Roles = "DeckMaster, Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID, Name, Description, Type, ArenaCoop, ArenaPVP, Class")] Deck deck)
+        public async Task<IActionResult> Edit(int id, [Bind("ID, Name, Description, Strategy, Type, ArenaCoop, ArenaPVP, Class")] Deck deck)
         {
             if (id != deck.ID)
             {
@@ -236,6 +242,7 @@ namespace FableFortuneCardList.Controllers
                 {
                     deck.ArenaCoop = DeckArenaCoop.None;
                 }
+                deck.Strategy = deck.Strategy.Replace("<", "").Replace(">", "");
                 try
                 {
                     _context.Update(deck);
@@ -262,6 +269,7 @@ namespace FableFortuneCardList.Controllers
             viewModel.Deck = deck;
             viewModel.Name = deck.Name;
             viewModel.Description = deck.Description;
+            viewModel.Strategy = deck.Strategy;
             viewModel.Class = deck.Class;
 
             return View(viewModel);
@@ -305,5 +313,45 @@ namespace FableFortuneCardList.Controllers
             return _context.Deck.Any(e => e.ID == id);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Vote()
+        {
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Vote(int deckId, int voteType)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var existingDeckRanking = _context.DeckRanking.FirstOrDefault(x => x.UserID == user.Id && x.DeckID == deckId);
+            if(existingDeckRanking != null)
+            {
+                if (existingDeckRanking.Ranking == voteType)
+                {
+                    // Ranking has not changed
+                    return Json(false);
+                }
+                else
+                {
+                    // Update existing ranking to new value
+                    _context.DeckRanking.First(x => x.Id == existingDeckRanking.Id).Ranking = voteType;
+                    await _context.SaveChangesAsync();
+                    return Json(true);
+                }
+            }
+            else
+            {
+                // New deck ranking
+                var deckRanking = new DeckRanking();
+                deckRanking.DeckID = deckId;
+                deckRanking.UserID = user.Id;
+                deckRanking.Ranking = voteType;
+
+                _context.Add(deckRanking);
+                await _context.SaveChangesAsync();
+
+                return Json(true);
+            }
+        }
     }
 }

@@ -7,69 +7,79 @@
 <h2>Edit</h2>
 <div class="col-md-10">
     <div class="panel">
-        <div class="panel-body">
-            <div class="col-md-6">
-                <form asp-action="Edit">
-                    <div class="form-horizontal">
-                        <h4>Deck</h4>
-                        <hr />
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <input type="hidden" asp-for="ID" />
-                        <div class="form-group">
-                            <label asp-for="Name" class="col-md-2 control-label"></label>
-                            <div class="col-md-10">
-                                <input asp-for="Name" class="form-control" />
-                                <span asp-validation-for="Name" class="text-danger" />
+        <div class="panel-body">            
+            <form asp-action="Edit">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-horizontal">
+                            <h4>Deck</h4>
+                            <hr />
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" asp-for="ID" />
+                            <div class="form-group">
+                                <label asp-for="Name" class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    <input asp-for="Name" class="form-control" />
+                                    <span asp-validation-for="Name" class="text-danger" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Description" class="col-md-2 control-label"></label>
-                            <div class="col-md-10">
-                                <textarea asp-for="Description" class="form-control" ></textarea>
-                                <span asp-validation-for="Description" class="text-danger" />
+                            <div class="form-group">
+                                <label asp-for="Description" class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    <textarea asp-for="Description" class="form-control" maxlength="190"></textarea>
+                                    <span asp-validation-for="Description" class="text-danger" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Type" class="col-md-2 control-label"></label>
-                            <div class="col-md-10">
-                                @Html.DropDownListFor(x => x.Type, (IEnumerable<SelectListItem>)ViewBag.DeckTypeList, null, new { @class = "form-control", onchange = "SetArenaType(this)", id = "ddDeckType" })
-                                <span asp-validation-for="Type" class="text-danger" />
+                            <div class="form-group">
+                                <label asp-for="Type" class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    @Html.DropDownListFor(x => x.Type, (IEnumerable<SelectListItem>)ViewBag.DeckTypeList, null, new { @class = "form-control", onchange = "SetArenaType(this)", id = "ddDeckType" })
+                                    <span asp-validation-for="Type" class="text-danger" />
+                                </div>
                             </div>
-                        </div>
-                        <div id="deckArenaCoopDiv" class="form-group hidden">
-                            <label asp-for="ArenaCoop" class="col-md-2 control-label"></label>
-                            <div class="col-md-10">
-                                @Html.DropDownListFor(x => x.ArenaCoop, (IEnumerable<SelectListItem>)ViewBag.DeckArenaCoop, null, new { @class = "form-control", onload = "SetCoopArenaOnLoad()" })
-                                <span asp-validation-for="ArenaCoop" class="text-danger" />
+                            <div id="deckArenaCoopDiv" class="form-group hidden">
+                                <label asp-for="ArenaCoop" class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    @Html.DropDownListFor(x => x.ArenaCoop, (IEnumerable<SelectListItem>)ViewBag.DeckArenaCoop, null, new { @class = "form-control", onload = "SetCoopArenaOnLoad()" })
+                                    <span asp-validation-for="ArenaCoop" class="text-danger" />
+                                </div>
                             </div>
-                        </div>
-                        <div id="deckArenaPVPDiv" class="form-group hidden">
-                            <label asp-for="ArenaPVP" class="col-md-2 control-label"></label>
-                            <div class="col-md-10">
-                                @Html.DropDownListFor(x => x.ArenaPVP, (IEnumerable<SelectListItem>)ViewBag.DeckArenaPVP, null, new { @class = "form-control", onload = "SetPVPArenaOnLoad()" })
-                                <span asp-validation-for="ArenaPVP" class="text-danger" />
+                            <div id="deckArenaPVPDiv" class="form-group hidden">
+                                <label asp-for="ArenaPVP" class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    @Html.DropDownListFor(x => x.ArenaPVP, (IEnumerable<SelectListItem>)ViewBag.DeckArenaPVP, null, new { @class = "form-control", onload = "SetPVPArenaOnLoad()" })
+                                    <span asp-validation-for="ArenaPVP" class="text-danger" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Class" class="col-md-2 control-label"></label>
-                            <div class="col-md-10">
-                                @Html.DropDownListFor(x=>x.Class, (IEnumerable<SelectListItem>)ViewBag.ClassList, null, new { @class="form-control"})
-                                <span asp-validation-for="Class" class="text-danger" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-offset-2 col-md-10">
-                                <input type="submit" value="Save" class="btn btn-default" />
+                            <div class="form-group">
+                                <label asp-for="Class" class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    @Html.DropDownListFor(x => x.Class, (IEnumerable<SelectListItem>)ViewBag.ClassList, null, new { @class = "form-control" })
+                                    <span asp-validation-for="Class" class="text-danger" />
+                                </div>
                             </div>
                         </div>
                     </div>
-                </form>
-            </div>
-            <div class="col-md-6">
-                <div id="DeckSummary">
-                    @{Html.RenderPartial("DeckGoldSummary", Model.Deck);}
+                    <div class="gold-summary col-md-6">
+                        <div id="DeckSummary">
+                            @{Html.RenderPartial("DeckGoldSummary", Model.Deck);}
+                        </div>
+                    </div>
                 </div>
-            </div>
+                <div class="form-group">
+                    <label asp-for="Strategy" class="col-md-1 control-label"></label>
+                    <div class="col-md-12">
+                        <textarea asp-for="Strategy" class="wide-input form-control"></textarea>
+                        <span asp-validation-for="Strategy" class="text-danger" />
+                    </div>
+                </div>
+                <br/>
+                <div class="form-group">
+                    <div class="col-md-10">
+                        <input type="submit" value="Save" class="top-margin btn btn-default" />
+                    </div>
+                </div>
+            </form>
             <div class="col-md-12">
                     <hr />
                     <div id="AvailableCardsTable">
@@ -140,7 +150,7 @@
         }
 
         function bindTableTooltips(){
-            $(document).tooltip({
+            $("#AvailableCards").tooltip({
                 items: "#AvailableCards tbody tr td a",
                 track: true,
                 tooltipClass: "cardTemplateTooltip",
@@ -195,8 +205,8 @@
                         $("#DeckCardSummary").html(html);
                         bindSummaryTooltips();
                         bindRemoveButtons();
-                        reloadDeckGoldSummary();
-                        loadAvailableCards();
+                        reloadDeckGoldSummary();                        
+                        loadAvailableCards();                        
                     }
                 });
 
@@ -218,8 +228,7 @@
                     success: function (html) {
                         $("#DeckCardSummary").html(html);
                         bindSummaryTooltips();
-                        bindRemoveButtons();
-
+                        bindRemoveButtons();                        
                         loadAvailableCards();
                     }
                 });
@@ -266,6 +275,10 @@
             } else if (sel.options[sel.selectedIndex].text == 'PVP') {
                 $('#deckArenaPVPDiv').removeClass('hidden')                
             }
+        });
+
+        $(document).ajaxStop(function () {
+            bindTableTooltips();
         });
     </script>
 }

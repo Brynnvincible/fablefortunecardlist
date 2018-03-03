@@ -33,8 +33,11 @@ namespace FableFortuneCardList
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationDbContext>(options => 
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            // Automatically perform database migration
+            services.BuildServiceProvider().GetService<ApplicationDbContext>().Database.Migrate();
 
             services.AddIdentity<ApplicationUser, ApplicationRole>(
                 o => {
@@ -69,14 +72,14 @@ namespace FableFortuneCardList
                     options.User.RequireUniqueEmail = true;
                 }
             });
-
+            
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                         .AddCookie(cookieOptions => cookieOptions.LoginPath = new PathString("/login"))
                         .AddFacebook(facebookOptions =>
                         {
-                            facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
-                            facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
-                        });
+                            facebookOptions.AppId = Environment.GetEnvironmentVariable("Authentication:Facebook:AppId");
+                            facebookOptions.AppSecret = Environment.GetEnvironmentVariable("Authentication:Facebook:AppSecret");
+                        });    
 
             services.AddMvc();
 
@@ -93,11 +96,9 @@ namespace FableFortuneCardList
             services.Configure<AuthMessageSenderOptions>(Configuration);
             services.Configure<AuthMessageSenderOptions>(o =>
             {
-                o.GmailEmailAddress = Configuration["Authentication:Gmail:EmailAddress"];
-                o.GmailEmailPassword = Configuration["Authentication:Gmail:Password"];
-            });
-            
-            
+                o.GmailEmailAddress = Environment.GetEnvironmentVariable("Authentication:Gmail:EmailAddress");
+                o.GmailEmailPassword = Environment.GetEnvironmentVariable("Authentication:Gmail:Password");
+            });                       
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

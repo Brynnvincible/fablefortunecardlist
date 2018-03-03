@@ -1,0 +1,657 @@
+﻿@model IEnumerable<FableFortuneCardList.Models.Card>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Encyclopedia:</h2>
+<div class="clearfix"></div>
+<div class="panel">
+    <div class="panel-body">
+        <div class="col-md-1" ></div>
+        <div class="col-md-11">
+            <p class="control-label">
+                <br />Currently this is just a list of card abilities, the Heroes and their powers (more coming soon!).<br />
+                For a more detailed guide, be sure to check out the <a href="http://www.fable-fortune.com/how-to-play/">"How To Play" guide at the official site</a>
+            </p>
+        </div>
+        <h1>Card Abilities</h1>
+        <div class="col-md-2">
+            <p class="control-label" style="text-align:right">Big Entrance:</p>
+        </div>
+        <div class="col-md-10">
+            <p class="control-label">
+                The Big Entrance ability will trigger whenever a unit with this ability is played directly from your hand. <br /> 
+                Note: The Big Entrance effect will not trigger if a unit is summoned by any means other than being played from your hand.
+            </p>
+        </div>
+        <div class="col-md-2">
+            <p class="control-label" style="text-align:right">Last Laugh:</p>
+        </div>
+        <div class="col-md-10">
+            <p class="control-label">
+                The Last Laugh ability will trigger whenever a unit with this ability dies.
+            </p>
+        </div>
+        <div class="col-md-2">
+            <p class="control-label" style="text-align:right">Deflect:</p>
+        </div>
+        <div class="col-md-10">
+            <p class="control-label">
+                A unit with Deflect will not take any damage the first time damage is dealt to it.  Once this damage has been absorbed, the unit will lose deflect and take damage normally.
+            </p>
+        </div>        
+        <div class="col-md-2">
+            <p class="control-label" style="text-align:right">Morality:</p>
+        </div>
+        <div class="col-md-10">
+            <p class="control-label">
+                A unit with the Morality ability will transform into an upgraded version of the card if played when the morality requirements have been met.  There will be a good and evil version of the upgraded card, chosen based on which morality you selected when you completed your last quest.
+                The level of Morality required to transform the card is shown in brackets next to the Morality text.  E.g. A card with Morality(1) will be able to transform after completing the first quest in an arena.  A card with Morality(3) will only transform after you have completed all three quests in an arena.
+            </p>
+        </div>
+        <div class="col-md-2">
+            <p class="control-label" style="text-align:right">Rush:</p>
+        </div>
+        <div class="col-md-10">
+            <p class="control-label">
+                Units with the Rush ability can attack the turn they are summoned.
+            </p>
+        </div>
+        <div class="col-md-2">
+            <p class="control-label" style="text-align:right">Safeguard:</p>
+        </div>
+        <div class="col-md-10">
+            <p class="control-label">
+                The Safeguard ability will trigger whenever a unit with this ability is placed into Guard.
+            </p>
+        </div>
+        <div class="col-md-2">
+            <p class="control-label" style="text-align:right">Stun:</p>
+        </div>
+        <div class="col-md-10">
+            <p class="control-label">
+                The Stun ability causes a selected unit to be unable to attack for one turn.
+            </p>
+        </div>
+        <div class="col-md-2">
+            <p class="control-label" style="text-align:right">Conjure:</p>
+        </div>
+        <div class="col-md-10">
+            <p class="control-label">
+                A card with the Conjure ability will allow the player to add a new card to their hand from a specified set.  The player will be given the a choice of three random cards from the set described alongside the conjure ability.
+            </p>
+        </div>     
+        <div class="col-md-2">
+            <p class="control-label" style="text-align:right">Silence:</p>
+        </div>
+        <div class="col-md-10">
+            <p class="control-label">
+                The silence ablity will cause a selected unit to lose all effects, buffs and abilities.
+                Note: Silence will also cause the removal of negative effects from a card.  For example, a unit that is stunned can be silenced to remove the stun effect and allow it to attack.  Or if a units Strength has been decreased by a spell or ability, silencing it will return its Strength to normal.
+            </p>
+        </div>      
+        <div class="col-md-2">
+            <p class="control-label" style="text-align:right">Guard:</p>
+        </div>
+        <div class="col-md-10">
+            <p class="control-label">
+                A unit in Guard must be attacked and destroyed before any units that are not in guard, or the hero, can be attacked.
+            </p>
+        </div>        
+        <div class="col-md-2">
+            <p class="control-label" style="text-align:right">Eulogy:</p>
+        </div>
+        <div class="col-md-10">
+            <p class="control-label">
+                The Eulogy ability will trigger whenever a unit with this ability is summoned after another unit died that turn.  If no other units died prior to a unit with the Eulogy ability being summoned, the effect will not occur.
+                Note: Only the Gravedigger hero has cards with the Eulogy ability.
+            </p>
+        </div>
+        <div class="col-md-2">
+            <p class="control-label" style="text-align:right">Train:</p>
+        </div>
+        <div class="col-md-10">
+            <p class="control-label">
+                A card with the Train ability will provide one of three potential upgrades to the unit when it is summoned:
+                 - On summon, gain +1 Strength
+                 - At the start of your turn, gain Gaurd
+                 - Has +2 Strength during your opponent's turn
+                When you summon a card with the Train ability, you can choose which upgrade you want to apply to it.
+                Note: Only the Knight hero has cards with the Train ability
+            </p>
+        </div>
+        <div class="col-md-2">
+            <p class="control-label" style="text-align:right">Lazy:</p>
+        </div>
+        <div class="col-md-10">
+            <p class="control-label">
+                A unit with the Lazy ability is not able to be placed into Guard the turn it is summoned.
+                Note: Only the Knight hero has cards with the Train ability
+            </p>
+        </div>
+        <div class="col-md-2">
+            <p class="control-label" style="text-align:right">Invest:</p>
+        </div>
+        <div class="col-md-10">
+            <p class="control-label">
+                A card with the Invest ability will have an upgraded effect that takes place provided additional gold is spent when casting that card.  The additional gold required for the Invest effect is shown in brackets.  E.g. Invest(+2) means two additional gold must be spent to trigger the invest effect.
+            </p>
+        </div>
+        <br />
+        <h1>Heroes</h1>
+        <h2>Miracle the Alchemist</h2>
+        <div class="col-md-2 transparent-png">
+            <img src="~/images/heroes/Miracle-Neutral.png" />
+        </div>
+        <div class="col-md-10 hero-text">
+            <p class="control-label">
+                Miracle, the Alchemist hero, can generate Vials with her hero power.  Her starting hero power is:<br />
+                <a id="Concoct" asp-controller="Cards" asp-action="Details" asp-route-id="Concoct">Concoct</a>
+                <br />This will summon one of the following random Vials: <br />
+                <a id="VialOfConfusion" asp-controller="Cards" asp-action="Details" asp-route-id="Vial_Of_Confusion">Vial Of Confusion</a>  &nbsp &nbsp
+                <a id="VialOfRestoration" asp-controller="Cards" asp-action="Details" asp-route-id="Vial_Of_Restoriation">Vial Of Restoration</a><br />
+                <a id="VialOfStrength" asp-controller="Cards" asp-action="Details" asp-route-id="Vial_Of_Strength">Vial Of Strength</a>  &nbsp &nbsp &nbsp &nbsp
+                <a id="VialOfVitality" asp-controller="Cards" asp-action="Details" asp-route-id="Vial_Of_Vitality">Vial Of Vitality</a>          
+            </p>
+        </div>
+        <div class="col-md-2 transparent-png">
+            <img src="~/images/heroes/Miracle-Good.png" />
+        </div>
+        <div class="col-md-10 hero-text">
+            <p class="control-label">
+                If you choose the Good morality alignment, Miracle's hero power upgrades to: <br />
+                <a id="EnhancedConcoction" asp-controller="Cards" asp-action="Details" asp-route-id="Enhanced_Concoction">Enhanced Concotion</a>
+                <br />This will generate enhanced Vials.  What you get is still random, but it will now be one of the following Vials:<br />
+                <a id="EnhancedVialOfConfusion" asp-controller="Cards" asp-action="Details" asp-route-id="Enhanced_Vial_Of_Confusion">Enhanced Vial Of Confusion</a> &nbsp &nbsp
+                <a id="EnhancedVialOfRestoration" asp-controller="Cards" asp-action="Details" asp-route-id="Enhanced_Vial_Of_Restoriation">Enhanced Vial Of Restoration</a> <br />
+                <a id="EnhancedVialOfStrength" asp-controller="Cards" asp-action="Details" asp-route-id="Enhanced_Vial_Of_Strength">Enhanced Vial Of Strength</a> &nbsp &nbsp &nbsp &nbsp
+                <a id="EnhancedVialOfVitality" asp-controller="Cards" asp-action="Details" asp-route-id="Enhanced_Vial_Of_Vitality">Enhanced Vial Of Vitality</a>
+            </p>
+        </div>
+        <div class="col-md-2 transparent-png">
+            <img src="~/images/heroes/Miracle-Evil.png" />
+        </div>
+        <div class="col-md-10 hero-text">
+            <p class="control-label">
+                If you choose the Evil morality alignment, Miracle's hero power upgrades to: <br />
+                <a id="DeviousConcoction" asp-controller="Cards" asp-action="Details" asp-route-id="Devious_Concoction">Devious Concoction</a>
+                <br />Vials do not get upgraded, however you are now able to choose which Vial you would like to add to you hand.      
+            </p>
+        </div>
+        <h2>Crimson the Shapeshifter</h2>
+        <div class="col-md-2 transparent-png">
+            <img src="~/images/heroes/Crimson-Neutral.png" />
+        </div>
+        <div class="col-md-10 hero-text">
+            <p class="control-label">
+                Crimson can use her hero power to rend targets for damage.  Her starting hero power is:<br /> 
+                <a id="Rend" asp-controller="Cards" asp-action="Details" asp-route-id="Rend">Rend</a>
+                <br />This can deal 1 damage to an enemy unit or the opponent.
+            </p>
+        </div>
+        <div class="col-md-2 transparent-png">
+            <img src="~/images/heroes/Crimson-Good.png" />
+        </div>
+        <div class="col-md-10 hero-text">
+            <p class="control-label">
+                If you choose the Good morality alignment, Crimson's hero power upgrades to:<br />
+                <a id="FocusedRend" asp-controller="Cards" asp-action="Details" asp-route-id="Focused_Rend">Focused Rend</a>
+                <br />This can deal 2 damage to the opponent or 1 damage to an enemy unit.
+            </p>
+        </div>
+        <div class="col-md-2 transparent-png">
+            <img src="~/images/heroes/Crimson-Evil.png" />
+        </div>
+        <div class="col-md-10 hero-text">
+            <p class="control-label">
+                If you choose the Evil morality alignment, Crimson's hero power upgrades to:<br />
+                <a id="DrainingRend" asp-controller="Cards" asp-action="Details" asp-route-id="Draining_Rend">Draining Rend</a>
+                <br />This can deal 1 damage to an enemy unit or the opponent and heals Crimson for 1 life. 
+            </p>
+        </div>
+        <h2>Temple the Gravedigger</h2>
+        <div class="col-md-2 transparent-png">
+            <img src="~/images/heroes/Temple-Neutral.png" />
+        </div>
+        <div class="col-md-10 hero-text">
+            <p class="control-label">
+                Temple can use her hero power to summon corpses to fight for her.  Her starting hero power is:<br />
+                <a id="Exhume" asp-controller="Cards" asp-action="Details" asp-route-id="Exhume">Exhume</a>
+                <br />This summons a Crumbling Corpse with Rush that dies at the end of the turn.
+            </p>
+        </div>
+        <div class="col-md-2 transparent-png">
+            <img src="~/images/heroes/Temple-Good.png" />
+        </div>
+        <div class="col-md-10 hero-text">
+            <p class="control-label">
+                If you choose the Good morality alignment, Temple's hero power upgrades to:<br />
+                <a id="Resurrect" asp-controller="Cards" asp-action="Details" asp-route-id="Resurrect">Resurrect</a>
+                <br />This summons a 1/1 Shambler and a 1/1 Crumbling Corpse with Rush that dies at the end of the turn.
+            </p>
+        </div>
+        <div class="col-md-2 transparent-png">
+            <img src="~/images/heroes/Temple-Evil.png" />
+        </div>
+        <div class="col-md-10 hero-text">
+            <p class="control-label">
+                If you choose the Evil morality alignment, Temple's hero power upgrades to:<br />
+                <a id="Enslave" asp-controller="Cards" asp-action="Details" asp-route-id="Enslave">Enslave</a>
+                <br />This summons a 2/1 Raging Corpse with Rush that dies at the end of the turn.
+            </p>
+        </div>
+        <h2>Marshall the Knight</h2>
+        <div class="col-md-2 transparent-png">
+            <img src="~/images/heroes/Marshall-Neutral.png" />
+        </div>
+        <div class="col-md-10 hero-text">
+            <p class="control-label">
+                Marshal can use his hero power to summon peasants to fight for him.  His starting hero power is:<br />
+                <a id="Enrollment" asp-controller="Cards" asp-action="Details" asp-route-id="Enrollment">Enrollment</a>
+                <br />This summons a Lazy Peasant.
+            </p>
+        </div>
+        <div class="col-md-2 transparent-png">
+            <img src="~/images/heroes/Marshall-Good.png" />
+        </div>
+        <div class="col-md-10 hero-text">
+            <p class="control-label">
+                If you choose the Good morality alignment, Marshall's hero power upgrades to:<br />
+                <a id="Recruitment" asp-controller="Cards" asp-action="Details" asp-route-id="Recruitment">Recruitment</a>
+                <br />This summons a Lazy Peasant and gives a random unit in Guard +1/+1.
+            </p>
+        </div>
+        <div class="col-md-2 transparent-png">
+            <img src="~/images/heroes/Marshall-Evil.png" />
+        </div>
+        <div class="col-md-10 hero-text">
+            <p class="control-label">
+                If you choose the Evil morality alignment, Marshall's hero power upgrades to:<br />
+                <a id="Conscription" asp-controller="Cards" asp-action="Details" asp-route-id="Conscription">Conscription</a>
+                <br />This summons a Lazy Peasant and Trains it.
+            </p>
+        </div>
+        <h2>Barter the Merchant</h2>
+        <div class="col-md-2 transparent-png">
+            <img src="~/images/heroes/Barter-Neutral.png" />
+        </div>
+        <div class="col-md-10 hero-text">
+            <p class="control-label">
+                Barter can use his hero power to gain a Gold Piece.  His starting hero power is:<br />
+                <a id="Haggle" asp-controller="Cards" asp-action="Details" asp-route-id="Haggle">Haggle</a>
+                <br />This will add a Gold Piece to your hand.
+            </p>
+        </div>
+        <div class="col-md-2 transparent-png">
+            <img src="~/images/heroes/Barter-Good.png" />
+        </div>
+        <div class="col-md-10 hero-text">
+            <p class="control-label">
+                If you choose the Good morality alignment, Barter's hero power upgrades to:<br />
+                <a id="SecureInvestment" asp-controller="Cards" asp-action="Details" asp-route-id="Secure_Investment">Secure Investment</a>
+                <br />This will add a Gold Piece to your hand and give a random unit in your hand +1/+1.
+            </p>
+        </div>
+        <div class="col-md-2 transparent-png">
+            <img src="~/images/heroes/Barter-Evil.png" />
+        </div>
+        <div class="col-md-10 hero-text">
+            <p class="control-label">
+                If you choose the Evil morality alignment, Barter's hero power upgrades to:<br />
+                <a id="RiskyInvestment" asp-controller="Cards" asp-action="Details" asp-route-id="Risky_Investment">Risky Investment</a>
+                <br />This will add a Gold Piece to your hand and reduce the cost of a card in your hand by 1 Gold.
+            </p>
+        </div>
+        <h2>Sand the Prophet</h2>
+        <div class="col-md-2 transparent-png">
+            <img src="~/images/heroes/Sand-Neutral.png" />
+        </div>
+        <div class="col-md-10 hero-text">
+            <p class="control-label">
+                Sand can use his hero power to Heal.  His starting hero power is:<br />
+                <a id="Restore" asp-controller="Cards" asp-action="Details" asp-route-id="Restore">Restore</a>
+                <br />This will heal any character for 2 Health.
+            </p>
+        </div>
+        <div class="col-md-2 transparent-png">
+            <img src="~/images/heroes/Sand-Good.png" />
+        </div>
+        <div class="col-md-10 hero-text">
+            <p class="control-label">
+                If you choose the Good morality alignment, Sand's hero power upgrades to:<br />
+                <a id="Energise" asp-controller="Cards" asp-action="Details" asp-route-id="Energise">Energise</a>
+                <br />This will heal any unit for 2 Health, or any Hero for 4 Health.
+            </p>
+        </div>
+        <div class="col-md-2 transparent-png">
+            <img src="~/images/heroes/Sand-Evil.png" />
+        </div>
+        <div class="col-md-10 hero-text">
+            <p class="control-label">
+                If you choose the Evil morality alignment, Sand's hero power upgrades to:<br />
+                <a id="Incite" asp-controller="Cards" asp-action="Details" asp-route-id="Incite">Incite</a>
+                <br />This will heal any character for 2 Health, and if the target is a unit it wil give it +1 Strength.
+            </p>
+        </div>
+
+        <div class="hidden">
+            <div id="VialOfConfusionTooltip" class='cardTemplateTooltip'>
+                @{Html.RenderPartial("CardView", Model.First(x => x.Name == "Vial Of Confusion"));}
+            </div>
+            <div id="VialOfRestorationTooltip" class='cardTemplateTooltip'>
+                @{Html.RenderPartial("CardView", Model.First(x => x.Name == "Vial Of Restoration"));}
+            </div>
+            <div id="VialOfStrengthTooltip" class='cardTemplateTooltip'>
+                @{Html.RenderPartial("CardView", Model.First(x => x.Name == "Vial Of Strength"));}
+            </div>
+            <div id="VialOfVitalityTooltip" class='cardTemplateTooltip'>
+                @{Html.RenderPartial("CardView", Model.First(x => x.Name == "Vial Of Vitality"));}
+            </div>
+            <div id="EnhancedVialOfConfusionTooltip" class='cardTemplateTooltip'>
+                @{Html.RenderPartial("CardView", Model.First(x => x.Name == "Enhanced Vial Of Confusion"));}
+            </div>
+            <div id="EnhancedVialOfRestorationTooltip" class='cardTemplateTooltip'>
+                @{Html.RenderPartial("CardView", Model.First(x => x.Name == "Enhanced Vial Of Restoration"));}
+            </div>
+            <div id="EnhancedVialOfStrengthTooltip" class='cardTemplateTooltip'>
+                @{Html.RenderPartial("CardView", Model.First(x => x.Name == "Enhanced Vial Of Strength"));}
+            </div>
+            <div id="EnhancedVialOfVitalityTooltip" class='cardTemplateTooltip'>
+                @{Html.RenderPartial("CardView", Model.First(x => x.Name == "Enhanced Vial Of Vitality"));}
+            </div>
+            <div id="ConcoctTooltip" class='cardTemplateTooltip'>
+                @{Html.RenderPartial("CardView", Model.First(x => x.Name == "Concoct"));}
+            </div>
+            <div id="EnhancedConcoctionTooltip" class='cardTemplateTooltip'>
+                @{Html.RenderPartial("CardView", Model.First(x => x.Name == "Enhanced Concoction"));}
+            </div>
+            <div id="DeviousConcoctionTooltip" class='cardTemplateTooltip'>
+                @{Html.RenderPartial("CardView", Model.First(x => x.Name == "Devious Concoction"));}
+            </div>
+            <div id="RendTooltip" class='cardTemplateTooltip'>
+                @{Html.RenderPartial("CardView", Model.First(x => x.Name == "Rend"));}
+            </div>
+            <div id="FocusedRendTooltip" class='cardTemplateTooltip'>
+                @{Html.RenderPartial("CardView", Model.First(x => x.Name == "Focused Rend"));}
+            </div>
+            <div id="DrainingRendTooltip" class='cardTemplateTooltip'>
+                @{Html.RenderPartial("CardView", Model.First(x => x.Name == "Draining Rend"));}
+            </div>
+            <div id="EnslaveTooltip" class='cardTemplateTooltip'>
+                @{Html.RenderPartial("CardView", Model.First(x => x.Name == "Enslave"));}
+            </div>
+            <div id="ExhumeTooltip" class='cardTemplateTooltip'>
+                @{Html.RenderPartial("CardView", Model.First(x => x.Name == "Exhume"));}
+            </div>
+            <div id="ResurrectTooltip" class='cardTemplateTooltip'>
+                @{Html.RenderPartial("CardView", Model.First(x => x.Name == "Resurrect"));}
+            </div>
+            <div id="EnrollmentTooltip" class='cardTemplateTooltip'>
+                @{Html.RenderPartial("CardView", Model.First(x => x.Name == "Enrollment"));}
+            </div>
+            <div id="RecruitmentTooltip" class='cardTemplateTooltip'>
+                @{Html.RenderPartial("CardView", Model.First(x => x.Name == "Recruitment"));}
+            </div>
+            <div id="ConscriptionTooltip" class='cardTemplateTooltip'>
+                @{Html.RenderPartial("CardView", Model.First(x => x.Name == "Conscription"));}
+            </div>
+            <div id="HaggleTooltip" class='cardTemplateTooltip'>
+                @{Html.RenderPartial("CardView", Model.First(x => x.Name == "Haggle"));}
+            </div>
+            <div id="SecureInvestmentTooltip" class='cardTemplateTooltip'>
+                @{Html.RenderPartial("CardView", Model.First(x => x.Name == "Secure Investment"));}
+            </div>
+            <div id="RiskyInvestmentTooltip" class='cardTemplateTooltip'>
+                @{Html.RenderPartial("CardView", Model.First(x => x.Name == "Risky Investment"));}
+            </div>
+            <div id="RestoreTooltip" class='cardTemplateTooltip'>
+                @{Html.RenderPartial("CardView", Model.First(x => x.Name == "Restore"));}
+            </div>
+            <div id="EnergiseTooltip" class='cardTemplateTooltip'>
+                @{Html.RenderPartial("CardView", Model.First(x => x.Name == "Energise"));}
+            </div>
+            <div id="InciteTooltip" class='cardTemplateTooltip'>
+                @{Html.RenderPartial("CardView", Model.First(x => x.Name == "Incite"));}
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+<script>
+    $("#VialOfConfusion").tooltip({
+        items: "a",
+        track: true,
+        tooltipClass: "cardTemplateTooltip",
+        content: function () {
+
+            return $("#VialOfConfusionTooltip").html();
+        }
+    });
+    $("#VialOfRestoration").tooltip({
+        items: "a",
+        track: true,
+        tooltipClass: "cardTemplateTooltip",
+        content: function () {
+
+            return $("#VialOfRestorationTooltip").html();
+        }
+    });
+    $("#VialOfStrength").tooltip({
+        items: "a",
+        track: true,
+        tooltipClass: "cardTemplateTooltip",
+        content: function () {
+
+            return $("#VialOfStrengthTooltip").html();
+        }
+    });
+    $("#VialOfVitality").tooltip({
+        items: "a",
+        track: true,
+        tooltipClass: "cardTemplateTooltip",
+        content: function () {
+
+            return $("#VialOfVitalityTooltip").html();
+        }
+    });
+    $("#EnhancedVialOfConfusion").tooltip({
+        items: "a",
+        track: true,
+        tooltipClass: "cardTemplateTooltip",
+        content: function () {
+
+            return $("#EnhancedVialOfConfusionTooltip").html();
+        }
+    });
+    $("#EnhancedVialOfRestoration").tooltip({
+        items: "a",
+        track: true,
+        tooltipClass: "cardTemplateTooltip",
+        content: function () {
+
+            return $("#EnhancedVialOfRestorationTooltip").html();
+        }
+    });
+    $("#EnhancedVialOfStrength").tooltip({
+        items: "a",
+        track: true,
+        tooltipClass: "cardTemplateTooltip",
+        content: function () {
+
+            return $("#EnhancedVialOfStrengthTooltip").html();
+        }
+    });
+    $("#EnhancedVialOfVitality").tooltip({
+        items: "a",
+        track: true,
+        tooltipClass: "cardTemplateTooltip",
+        content: function () {
+
+            return $("#EnhancedVialOfVitalityTooltip").html();
+        }
+    });
+    $("#Concoct").tooltip({
+        items: "a",
+        track: true,
+        tooltipClass: "cardTemplateTooltip",
+        content: function () {
+
+            return $("#ConcoctTooltip").html();
+        }
+    });
+    $("#EnhancedConcoction").tooltip({
+        items: "a",
+        track: true,
+        tooltipClass: "cardTemplateTooltip",
+        content: function () {
+
+            return $("#EnhancedConcoctionTooltip").html();
+        }
+    });
+    $("#DeviousConcoction").tooltip({
+        items: "a",
+        track: true,
+        tooltipClass: "cardTemplateTooltip",
+        content: function () {
+
+            return $("#DeviousConcoctionTooltip").html();
+        }
+    });
+    $("#Rend").tooltip({
+        items: "a",
+        track: true,
+        tooltipClass: "cardTemplateTooltip",
+        content: function () {
+
+            return $("#RendTooltip").html();
+        }
+    });
+    $("#FocusedRend").tooltip({
+        items: "a",
+        track: true,
+        tooltipClass: "cardTemplateTooltip",
+        content: function () {
+
+            return $("#FocusedRendTooltip").html();
+        }
+    });
+    $("#DrainingRend").tooltip({
+        items: "a",
+        track: true,
+        tooltipClass: "cardTemplateTooltip",
+        content: function () {
+
+            return $("#DrainingRendTooltip").html();
+        }
+    });
+    $("#Enslave").tooltip({
+        items: "a",
+        track: true,
+        tooltipClass: "cardTemplateTooltip",
+        content: function () {
+
+            return $("#EnslaveTooltip").html();
+        }
+    });
+    $("#Exhume").tooltip({
+        items: "a",
+        track: true,
+        tooltipClass: "cardTemplateTooltip",
+        content: function () {
+
+            return $("#ExhumeTooltip").html();
+        }
+    });
+    $("#Resurrect").tooltip({
+        items: "a",
+        track: true,
+        tooltipClass: "cardTemplateTooltip",
+        content: function () {
+
+            return $("#ResurrectTooltip").html();
+        }
+    });
+    $("#Enrollment").tooltip({
+        items: "a",
+        track: true,
+        tooltipClass: "cardTemplateTooltip",
+        content: function () {
+
+            return $("#EnrollmentTooltip").html();
+        }
+    });
+    $("#Recruitment").tooltip({
+        items: "a",
+        track: true,
+        tooltipClass: "cardTemplateTooltip",
+        content: function () {
+
+            return $("#RecruitmentTooltip").html();
+        }
+    });
+    $("#Conscription").tooltip({
+        items: "a",
+        track: true,
+        tooltipClass: "cardTemplateTooltip",
+        content: function () {
+
+            return $("#ConscriptionTooltip").html();
+        }
+    });
+    $("#Haggle").tooltip({
+        items: "a",
+        track: true,
+        tooltipClass: "cardTemplateTooltip",
+        content: function () {
+
+            return $("#HaggleTooltip").html();
+        }
+    });
+    $("#SecureInvestment").tooltip({
+        items: "a",
+        track: true,
+        tooltipClass: "cardTemplateTooltip",
+        content: function () {
+
+            return $("#SecureInvestmentTooltip").html();
+        }
+    });
+    $("#RiskyInvestment").tooltip({
+        items: "a",
+        track: true,
+        tooltipClass: "cardTemplateTooltip",
+        content: function () {
+
+            return $("#RiskyInvestmentTooltip").html();
+        }
+    });
+    $("#Restore").tooltip({
+        items: "a",
+        track: true,
+        tooltipClass: "cardTemplateTooltip",
+        content: function () {
+
+            return $("#RestoreTooltip").html();
+        }
+    });
+    $("#Energise").tooltip({
+        items: "a",
+        track: true,
+        tooltipClass: "cardTemplateTooltip",
+        content: function () {
+
+            return $("#EnergiseTooltip").html();
+        }
+    }); $("#Incite").tooltip({
+        items: "a",
+        track: true,
+        tooltipClass: "cardTemplateTooltip",
+        content: function () {
+
+            return $("#InciteTooltip").html();
+        }
+    });
+</script>
+}

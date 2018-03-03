@@ -1,15 +1,67 @@
 @model FableFortuneCardList.Models.Deck
 
 @{
+    double zeroCostHeight = 0.0;
+    double oneCostHeight = 0.0;
+    double twoCostHeight = 0.0;
+    double threeCostHeight = 0.0;
+    double fourCostHeight = 0.0;
+    double fiveCostHeight = 0.0;
+    double sixCostHeight = 0.0;
+    double sevenUpCostHeight = 0.0;
+
     double totalCardCount = Model.DeckCards.Count();
-    double zeroCostHeight = 100 * (Model.DeckCards.Count(x => x.Card.Gold == 0) / totalCardCount);
-    double oneCostHeight = 100 * (Model.DeckCards.Count(x => x.Card.Gold == 1) / totalCardCount);
-    double twoCostHeight = 100 * (Model.DeckCards.Count(x => x.Card.Gold == 2) / totalCardCount);
-    double threeCostHeight = 100 * (Model.DeckCards.Count(x => x.Card.Gold == 3) / totalCardCount);
-    double fourCostHeight = 100 * (Model.DeckCards.Count(x => x.Card.Gold == 4) / totalCardCount);
-    double fiveCostHeight = 100 * (Model.DeckCards.Count(x => x.Card.Gold == 5) / totalCardCount);
-    double sixCostHeight = 100 * (Model.DeckCards.Count(x => x.Card.Gold == 6) / totalCardCount);
-    double sevenUpCostHeight = 100 * (Model.DeckCards.Count(x => x.Card.Gold >= 7) / totalCardCount);
+
+    if (totalCardCount > 0)
+    {
+        int zeroCount = Model.DeckCards.Count(x => x.Card.Gold == 0);
+        int oneCount = Model.DeckCards.Count(x => x.Card.Gold == 1);
+        int twoCount = Model.DeckCards.Count(x => x.Card.Gold == 2);
+        int threeCount = Model.DeckCards.Count(x => x.Card.Gold == 3);
+        int fourCount = Model.DeckCards.Count(x => x.Card.Gold == 4);
+        int fiveCount = Model.DeckCards.Count(x => x.Card.Gold == 5);
+        int sixCount = Model.DeckCards.Count(x => x.Card.Gold == 6);
+        int sevenPlusCount = Model.DeckCards.Count(x => x.Card.Gold >= 7);
+
+        int highestCount = zeroCount;
+        if (oneCount > highestCount)
+        {
+            highestCount = oneCount;
+        }
+        if (twoCount > highestCount)
+        {
+            highestCount = twoCount;
+        }
+        if (threeCount > highestCount)
+        {
+            highestCount = threeCount;
+        }
+        if (fourCount > highestCount)
+        {
+            highestCount = fourCount;
+        }
+        if (fiveCount > highestCount)
+        {
+            highestCount = fiveCount;
+        }
+        if (sixCount > highestCount)
+        {
+            highestCount = sixCount;
+        }
+        if (sevenPlusCount > highestCount)
+        {
+            highestCount = sevenPlusCount;
+        }
+
+        zeroCostHeight = 100 * ((double)zeroCount / (double)highestCount);
+        oneCostHeight = 100 * ((double)oneCount / (double)highestCount);
+        twoCostHeight = 100 * ((double)twoCount / (double)highestCount);
+        threeCostHeight = 100 * ((double)threeCount / (double)highestCount);
+        fourCostHeight = 100 * ((double)fourCount / (double)highestCount);
+        fiveCostHeight = 100 * ((double)fiveCount / (double)highestCount);
+        sixCostHeight = 100 * ((double)sixCount / (double)highestCount);
+        sevenUpCostHeight = 100 * ((double)sevenPlusCount / (double)highestCount);
+    }
 }
 
     <div class="goldCostSummary-mini">

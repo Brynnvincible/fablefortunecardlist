@@ -9,15 +9,29 @@
 <div class="col-md-10">
     <div class="panel">
         <div class="panel-body">
-            <div class="col-md-6">
-                <h2>@Model.Name</h2>
-                <h3>@Model.Description</h3>
-                <h4>Class: @Model.Class</h4>
-                <p>Created by: @Model.CreatedBy.UserName</p>
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>@Model.Name</h2>
+                    <h3>@Model.Description</h3>
+                    <h4>Class: @Model.Class</h4>
+                    <h4>Type: @Model.Type</h4>
+                    @if (Model.Type == FableFortuneCardList.Enums.DeckType.Coop)
+                    {
+                        <h4>Boss: @Model.ArenaCoop</h4>
+                    }
+                    else
+                    {
+                        <h4>Arena: @Model.ArenaPVP</h4>
+                    }
+                    <p>Created by: @Model.CreatedBy.UserName</p>
+                </div>
+                <div class="gold-summary col-md-6">
+                    @{Html.RenderPartial("DeckGoldSummary", Model);}
+                </div>
             </div>
-            <div class="col-md-6">
-                @{Html.RenderPartial("DeckGoldSummary", Model);}
-            </div>
+            <hr />
+            <h3>Strategy:</h3>
+            <p>@Html.Raw(Model.Strategy.Replace(Environment.NewLine, "<br />"))</p>
             <hr />
             @foreach (var card in Model.DeckCards.OrderBy(x => x.Card.Gold))
             {
@@ -29,6 +43,13 @@
             }
             <div class="clearfix"></div>
             <div>
+                @if (@Model.CreatedBy.UserName == User.Identity.Name || User.IsInRole("Admin"))
+                {
+                    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a>
+                    <br/>
+                    <a asp-action="Delete" asp-route-id="@Model.ID">Delete</a>
+                    <br/>
+                }
                 <a asp-action="Index">Back to List</a>
             </div>
         </div>
