@@ -57,10 +57,15 @@ namespace FableFortuneCardList.Controllers
             });
         }
                   
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             List<Deck> deckList = _context.Deck.Include(x=>x.CreatedBy).Include(x=>x.DeckCards).ThenInclude(x=>x.Card).Include(x=>x.DeckRankings).ToList();
 
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                ViewData["currentUserId"] = user.Id;
+            }
             return View(deckList);
         }
 
@@ -167,6 +172,7 @@ namespace FableFortuneCardList.Controllers
                 {
                     deck.ArenaCoop = DeckArenaCoop.None;
                 }
+                deck.Strategy = deck.Strategy.Replace("<", "").Replace(">", "");
                 _context.Add(deck);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Edit", new { Id = deck.ID });
@@ -236,6 +242,7 @@ namespace FableFortuneCardList.Controllers
                 {
                     deck.ArenaCoop = DeckArenaCoop.None;
                 }
+                deck.Strategy = deck.Strategy.Replace("<", "").Replace(">", "");
                 try
                 {
                     _context.Update(deck);

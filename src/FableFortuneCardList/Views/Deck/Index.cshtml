@@ -65,9 +65,13 @@
                                             if (User.Identity.IsAuthenticated && (User.IsInRole("DeckMaster") || User.IsInRole("Admin")))
                                             {
                                                 var arrowClassUp = "vote-button-not-voted";
-                                                if (item.DeckRankings.Any(x => x.UserID == item.CreatedBy.Id) && item.DeckRankings.First(x => x.UserID == item.CreatedBy.Id).Ranking == 1)
+                                                var userDeckRanking = item.DeckRankings.FirstOrDefault(x => x.UserID == ViewData["currentUserId"].ToString());
+                                                if (userDeckRanking != null)
                                                 {
-                                                    arrowClassUp = "vote-button-voted link-disabled";
+                                                    if (userDeckRanking.Ranking == 1)
+                                                    {
+                                                        arrowClassUp = "vote-button-voted link-disabled";
+                                                    }
                                                 }
                                                 <a id="voteUp" href="@Url.Action("Vote", "Deck")" data-vote-type=1 data-itemid="@item.ID" class="vote-button @arrowClassUp">⇧</a>
                                             }
@@ -82,9 +86,13 @@
                                             if (User.Identity.IsAuthenticated && (User.IsInRole("DeckMaster") || User.IsInRole("Admin")))
                                             {
                                                 var arrowClassDown = "vote-button-not-voted";
-                                                if (item.DeckRankings.Any(x => x.UserID == item.CreatedBy.Id) && item.DeckRankings.First(x => x.UserID == item.CreatedBy.Id).Ranking == -1)
+                                                var userDeckRanking = item.DeckRankings.FirstOrDefault(x => x.UserID == ViewData["currentUserId"].ToString());
+                                                if (userDeckRanking != null)
                                                 {
-                                                    arrowClassDown = "vote-button-voted link-disabled";
+                                                    if (userDeckRanking.Ranking == -1)
+                                                    {
+                                                        arrowClassDown = "vote-button-voted link-disabled";
+                                                    }
                                                 }
                                                 <a id="voteDown" href="@Url.Action("Vote", "Deck")" data-vote-type=-1 data-itemid="@item.ID" class="vote-button @arrowClassDown">⇩</a>
                                             }
