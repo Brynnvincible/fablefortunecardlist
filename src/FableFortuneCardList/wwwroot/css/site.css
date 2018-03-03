@@ -76,7 +76,10 @@ table.dataTable tbody tr {
     background-color: #a89167;
     border-radius: 8px;
     box-shadow: 0px 0px 10px rgba(0,0,0,0.8);
-    padding: 12px;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    padding-left: 25px;
+    padding-right: 20px;
     background-image: url(/images/Large_ET-191.png);
     background-position: center;
 
@@ -707,7 +710,7 @@ ul.filterList .rarity.Basic{
 }
 
 .ui-tooltip-content{
-    width:700px;
+    width:1000px;
 }
 
 .ui-widget-header input, .ui-widget-header select{
@@ -788,3 +791,16 @@ textarea {
 .created-by {
     min-width: 80px;
 }
+
+.transparent-png {
+    background-color: transparent;
+    border: none;
+    max-width: 100%;
+    text-align: right;
+    height: 130px;
+}
+
+.hero-text {
+    min-height: 130px;
+}
+

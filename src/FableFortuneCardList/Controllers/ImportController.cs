@@ -13,6 +13,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using System.Data;
 using System.IO.Compression;
+using FableFortuneCardList.Shared;
+using Microsoft.AspNetCore.Identity;
+using FableFortuneCardList.Services;
 
 namespace FableFortuneCardList.Controllers
 {
@@ -21,12 +24,15 @@ namespace FableFortuneCardList.Controllers
     {
         private readonly ApplicationDbContext _context;
         private IHostingEnvironment _env;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IEmailSender _emailSender;
 
-
-        public ImportController(ApplicationDbContext context, IHostingEnvironment environment)
+        public ImportController(ApplicationDbContext context, IHostingEnvironment environment, UserManager<ApplicationUser> userManager, IEmailSender emailSender)
         {
             _context = context;
             _env = environment;
+            _userManager = userManager;
+            _emailSender = emailSender;
         }
 
         [HttpGet]
@@ -65,7 +71,7 @@ namespace FableFortuneCardList.Controllers
         public async Task<IActionResult> UploadImages(IFormFile file)
         {
             if(file.Length > 0)
-            {
+            {                
                 var filename = Path.Combine(_env.WebRootPath, @"Imports\", file.FileName);
                 using (var fileStream = new FileStream(filename, FileMode.Create))
                 {
@@ -73,6 +79,11 @@ namespace FableFortuneCardList.Controllers
                 }
 
                 var dirInfoExtract = new DirectoryInfo(Path.Combine(_env.WebRootPath, @"images\cards\extract"));
+
+                if (!dirInfoExtract.Exists)
+                {
+                    dirInfoExtract.Create();
+                }
 
                 foreach(FileInfo imageFile in dirInfoExtract.GetFiles("*", SearchOption.AllDirectories))
                 {
@@ -91,8 +102,7 @@ namespace FableFortuneCardList.Controllers
                     foreach(FileInfo imageFile in dirInfoExtract.GetFiles("*", SearchOption.AllDirectories))
                     {
                         var oldName = imageFile.Name;
-                        var extension = imageFile.Extension;
-                        var newPath = Path.Combine(_env.WebRootPath, @"images\Cards", oldName.Split('_')[0].Replace('-', '_') + extension);
+                        var newPath = Path.Combine(_env.WebRootPath, @"images\Cards", oldName);
                         if (System.IO.File.Exists(newPath))
                             System.IO.File.Delete(newPath);
                         imageFile.MoveTo(newPath);
@@ -112,19 +122,108 @@ namespace FableFortuneCardList.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> DeleteAllImages()
+        {
+            long totalSize = 0;
+            List<string> filenames = new List<string>();
+            var dirInfoCards = new DirectoryInfo(Path.Combine(_env.WebRootPath, @"images\cards"));
+
+            if (dirInfoCards.Exists)
+            {
+                foreach (FileInfo imageFile in dirInfoCards.GetFiles("*", SearchOption.AllDirectories))
+                {
+                    filenames.Add(imageFile.FullName);
+                    totalSize += imageFile.Length;
+                    imageFile.Delete();
+                }
+            }
+
+            string msg = string.Format("Deleted {0} files.", filenames.Count);
+            if (filenames.Count > 0)
+            {
+                msg += "<br>The following files were deleted: ";
+                foreach (string f in filenames)
+                {
+                    msg += "<br>  - " + f;
+                }
+                msg += string.Format("<br>Total size of files deleted: {0}Mb", (int)(totalSize / 1024 / 1024));
+            }
+            return View("UploadResult", msg);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CleanupImportExportDirs()
+        {
+            long totalSize = 0;
+            List<string> filenames = new List<string>();
+
+            var dirInfoExtract = new DirectoryInfo(Path.Combine(_env.WebRootPath, @"images\cards\extract"));
+            var dirInfoImport = new DirectoryInfo(Path.Combine(_env.WebRootPath, @"Imports"));
+            var dirInfoExport = new DirectoryInfo(Path.Combine(_env.WebRootPath, @"Exports"));
+
+            if (dirInfoExtract.Exists)
+            {
+                foreach (FileInfo imageFile in dirInfoExtract.GetFiles("*", SearchOption.AllDirectories))
+                {
+                    filenames.Add(imageFile.FullName);
+                    totalSize += imageFile.Length;
+                    imageFile.Delete();
+                }
+            }
+            if (dirInfoImport.Exists)
+            {
+                foreach (FileInfo imageFile in dirInfoImport.GetFiles("*", SearchOption.AllDirectories))
+                {
+                    filenames.Add(imageFile.FullName);
+                    totalSize += imageFile.Length;
+                    imageFile.Delete();
+                }
+            }
+            if (dirInfoExport.Exists)
+            {
+                foreach (FileInfo imageFile in dirInfoExport.GetFiles("*", SearchOption.AllDirectories))
+                {
+                    filenames.Add(imageFile.FullName);
+                    totalSize += imageFile.Length;
+                    imageFile.Delete();
+                }
+            }
+
+            string msg = string.Format("Deleted {0} files.", filenames.Count);
+            if (filenames.Count > 0)
+            {
+                msg += "<br>The following files were deleted: ";
+                foreach (string f in filenames)
+                {
+                    msg += "<br>  - " + f;
+                }
+                msg += string.Format("<br>Total size of files deleted: {0}Mb", (int)(totalSize / 1024 / 1024));
+            }
+            return View("UploadResult", msg);
+        }
+
+        [HttpPost]
         public async Task<IActionResult> CheckImageURLs()
         {
+            bool updated = false;
             List<string> missingImageURLs = new List<string>();
             foreach (Card card in _context.Card)
             {
-                if (card.ImageUrl == string.Empty)
+                string imagePath = Path.Combine(_env.WebRootPath, @"images\cards", ValidateCardImageURL.GetCardImageURL(card.Name));
+                if (card.ImageUrl != imagePath)
                 {
-                    missingImageURLs.Add(string.Format("{0} has a blank image URL (Sheet ID = {1})", card.Name, card.SheetId));
+                    updated = true;
+                    card.ImageUrl = imagePath;                    
                 }
-                else if (!System.IO.File.Exists(card.ImageUrl))
+                if (!System.IO.File.Exists(card.ImageUrl))
                 {
                     missingImageURLs.Add(string.Format("{0} points to a missing image file {1} (Sheet ID = {2}", card.Name, card.ImageUrl, card.SheetId));
                 }
+            }
+
+            if (updated)
+            {
+                await _context.SaveChangesAsync();
             }
 
             string msg = string.Empty;
@@ -149,7 +248,7 @@ namespace FableFortuneCardList.Controllers
             /* Sheet Layout     (This is how the sheet will be exported, so it must be imported in the same order)
              * 1 - ID           | 2 - Class         | 3 - Rarity        | 4 - Gold              | 5 - Name              | 
              * 6 - Strength     | 7 - Health        | 8 - Ability       | 9 - Transform         | 10 - Transform Type   | 
-             * 11 - Type        | 12 - Image URL    | 13 - UnitClass    | 14 - SheetID          | 15 - DeckCards        | 16 - Transforms       | */             
+             * 11 - Type        | 12 - Image URL    | 13 - UnitClass    | 14 - SheetID          | 15 - Evolves        | 16 - Associated       | */             
 
             int updateCount = 0;
             int addCount = 0;
@@ -158,6 +257,11 @@ namespace FableFortuneCardList.Controllers
 
             if (file.Length > 0)
             {
+                var dirInfoImports = new DirectoryInfo(Path.Combine(_env.WebRootPath, @"Imports"));
+                if(!dirInfoImports.Exists)
+                {
+                    dirInfoImports.Create();
+                }
                 using (var fileStream = new FileStream(Path.Combine(_env.WebRootPath, @"Imports\", file.FileName), FileMode.Create))
                 {
                     file.CopyTo(fileStream);
@@ -190,6 +294,8 @@ namespace FableFortuneCardList.Controllers
                         string cardTypeValue = workSheet.Cells[j, 11].Value == null || workSheet.Cells[j, 11].Value.ToString() == string.Empty ? healthValue == 0 ? "Spell" : "Unit" : workSheet.Cells[j, 11].Value.ToString();
                         string unitClassValue = workSheet.Cells[j, 13].Value == null ? string.Empty : workSheet.Cells[j, 13].Value.ToString();                        
                         int sheetIdValue = workSheet.Cells[j, 14].Value == null ? 0 : int.Parse(workSheet.Cells[j, 14].Value.ToString());
+                        int evolvesValue = workSheet.Cells[j, 15].Value == null ? 0 : int.Parse(workSheet.Cells[j, 15].Value.ToString());
+                        string associatedValue = workSheet.Cells[j, 16].Value == null ? string.Empty : workSheet.Cells[j, 16].Value.ToString();
 
                         if (sheetIdValue == 0)
                         {
@@ -269,6 +375,16 @@ namespace FableFortuneCardList.Controllers
                                 existingCard.Type = cardTypeValue;
                                 updated = true;
                             }
+                            if (existingCard.Evolves != evolvesValue)
+                            {
+                                existingCard.Evolves = evolvesValue;
+                                updated = true;
+                            }
+                            if (existingCard.Associated != associatedValue)
+                            {
+                                existingCard.Associated = associatedValue;
+                                updated = true;
+                            }
                             if (updated)
                                 updateCount++;
                         }
@@ -288,7 +404,9 @@ namespace FableFortuneCardList.Controllers
                                 TransformType = transformTypeValue,
                                 UnitClass = unitClassValue,
                                 Type = cardTypeValue,
-                                SheetId = sheetIdValue
+                                SheetId = sheetIdValue,
+                                Evolves = evolvesValue,
+                                Associated = associatedValue
                             };
                        
                             _context.Add(card);
@@ -333,6 +451,39 @@ namespace FableFortuneCardList.Controllers
             }
 
             return File(newFile.OpenRead(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SendVerificationEmails()
+        {
+            List<string> users = new List<string>();
+            foreach(ApplicationUser user in _context.Users)
+            {
+                if(!user.EmailConfirmed)
+                {
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+                    var email = user.Email;
+                    await _emailSender.SendEmailConfirmationAsync(email, callbackUrl);
+                    users.Add(user.Email);
+                }
+            }
+
+            string msg = string.Empty;
+            if (users.Count > 0)
+            {
+                msg = string.Format("Sent {0} confirmations emails to the following accounts:<br>", users.Count);
+                foreach (string email in users)
+                {
+                    msg += " - " + email;
+                }
+            }
+            else
+            {
+                msg = "All users already had their emails confirmed.  No verification emails were sent.";
+            }
+
+            return View("UploadResult", msg);
         }
 
         private int FixSheetIds()

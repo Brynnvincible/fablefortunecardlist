@@ -48,6 +48,7 @@ namespace FableFortuneCardList.Controllers
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
                 : message == ManageMessageId.VerificationEmailSent ? "Verification email sent. Please check your email."
+                : message == ManageMessageId.ProfileUpdated ? "Your profile has been updated."
                 : "";
 
             var user = await GetCurrentUserAsync();
@@ -67,6 +68,34 @@ namespace FableFortuneCardList.Controllers
                 BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user)
             };
             return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Index(IndexViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(nameof(Index), model);
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            var email = user.Email;
+            if (model.Email != email)
+            {
+                var setEmailResult = await _userManager.SetEmailAsync(user, model.Email);
+                if (!setEmailResult.Succeeded)
+                {
+                    throw new ApplicationException($"Unexpected error occurred setting email for user with ID '{user.Id}'.");
+                }
+            }
+
+            return RedirectToAction(nameof(Index), new { Message = ManageMessageId.ProfileUpdated});
         }
 
         //
@@ -95,7 +124,7 @@ namespace FableFortuneCardList.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return View(nameof(Index), model);
             }
 
             var user = await _userManager.GetUserAsync(User);
@@ -109,7 +138,7 @@ namespace FableFortuneCardList.Controllers
             var email = user.Email;
             await _emailSender.SendEmailConfirmationAsync(email, callbackUrl);
             
-            return RedirectToAction(nameof(ManageLogins), new { Message = ManageMessageId.VerificationEmailSent });
+            return RedirectToAction(nameof(Index), new { Message = ManageMessageId.VerificationEmailSent });
         }
 
         //
@@ -376,7 +405,8 @@ namespace FableFortuneCardList.Controllers
             RemoveLoginSuccess,
             RemovePhoneSuccess,
             Error,
-            VerificationEmailSent
+            VerificationEmailSent,
+            ProfileUpdated
         }
 
         private Task<ApplicationUser> GetCurrentUserAsync()

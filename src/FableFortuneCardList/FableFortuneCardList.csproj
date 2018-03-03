@@ -18,18 +18,15 @@
 
   <ItemGroup>
 	<PackageReference Include="bootstrap" Version="3.3.7" />
+	<PackageReference Include="BuildBundlerMinifier" Version="2.6.362" />
 	<PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="EPPlus.Core" Version="1.5.4" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="2.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" />
     <PackageReference Include="System.IO.Compression.ZipFile" Version="4.3.0" />
   </ItemGroup>
-
-  <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
-    <Exec Command="bower install" />
-    <Exec Command="dotnet bundle" />
-  </Target>
-
+  
   <ItemGroup>
     <DotNetCliToolReference Include="BundlerMinifier.Core" Version="2.2.301" />
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0" />
@@ -39,6 +36,8 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\cards\extract\" />
+    <Folder Include="wwwroot\images\locations\" />
+    <Folder Include="wwwroot\images\bosses\" />
   </ItemGroup>
 
 </Project>

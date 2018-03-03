@@ -1,10 +1,11 @@
 @model FableFortuneCardList.Models.Card
 @using System.IO;
+@using FableFortuneCardList.Shared;
 
 @if (!string.IsNullOrEmpty(Model.ImageUrl))
 {
 <div class="cardImage">
-    <img src="~/images/cards/@(Model.Name.Replace(' ', '_') + ".png")" class="cardImage" />
+    <img src="~/images/cards/@System.IO.Path.GetFileName(Model.ImageUrl)" class="cardImage" />
 </div>
 }else{
 <div class="cardTemplate ui-widget-header">
@@ -44,4 +45,13 @@
         Html.RenderPartial("CardView", transformCard);
     }
 }
-
+@if (Model.Evolves > 0)
+{
+    for (int x = 1; x <= Model.Evolves; x++)
+    {
+        Card evolve = Model.Clone();
+        evolve.ImageUrl = ValidateCardImageURL.GetCardEvolutionName(Model.Name, x);
+        evolve.Evolves = 0;
+        Html.RenderPartial("CardView", evolve);
+    }
+}

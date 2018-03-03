@@ -14,6 +14,8 @@ namespace FableFortuneCardList.Enums
         Knight = 5,
         Merchant = 6,
         Prophet = 7,
-        Trophy = 8
+        Trophy = 8,
+        Quest = 9,
+        None = 10
     }
 }

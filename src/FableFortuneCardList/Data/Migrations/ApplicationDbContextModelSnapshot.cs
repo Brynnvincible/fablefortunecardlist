@@ -111,7 +111,11 @@ namespace FableFortuneCardList.Data.Migrations
 
                     b.Property<string>("Ability");
 
+                    b.Property<string>("Associated");
+
                     b.Property<int>("Class");
+
+                    b.Property<int>("Evolves");
 
                     b.Property<int>("Gold");
 

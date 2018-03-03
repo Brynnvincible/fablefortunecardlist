@@ -26,7 +26,7 @@
         <div class="col-md-6">
             <h2>Decks</h2>
             <h4>This card appears in:</h4>
-    
+
             <ul>
                 @foreach (var deck in Model.DeckCards.Select(x => x.Deck).Distinct().ToList())
                 {
@@ -39,14 +39,134 @@
                             </div>
                         </a>
                     </li>
-
-
-
-
-
                                     }
             </ul>
-
         </div>
+        @if (Model.AssociatedCards.Count > 0)
+        {
+            <div class="col-md-12">
+                <h2>Associated Cards:</h2>
+                <table class="table" id="myTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Gold)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+                            <th class="mobileHideSmall">
+                                @Html.DisplayNameFor(model => model.Class)
+                            </th>
+                            <th class="mobileHide">
+                                @Html.DisplayNameFor(model => model.Ability)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Strength)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Health)
+                            </th>
+                            <th class="mobileHideSmall">
+                                @Html.DisplayNameFor(model => model.Rarity)
+                            </th>
+                            <th class="mobileHideSmall">
+                                @Html.DisplayNameFor(model => model.Type)
+                            </th>
+                            <th class="hidden"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.AssociatedCards)
+                        {
+                            <tr>
+                                <td class="gold">
+                                    @if (item.Transform != null && item.Transform != string.Empty)
+                                    {
+                                        <text>N/A</text>
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Gold)
+                                    }
+                                </td>
+                                <td>
+                                    <a asp-area="" asp-action="Details" asp-route-id="@System.Net.WebUtility.UrlEncode(item.Name.Trim().Replace(" ", "_"))">@Html.DisplayFor(modelItem => item.Name)</a>
+                                </td>
+                                <td class="mobileHideSmall">
+                                    @Html.DisplayFor(modelItem => item.Class)
+                                </td>
+                                <td class="mobileHide">
+                                    @Html.DisplayFor(modelItem => item.Ability)
+                                </td>
+                                <td class="strength">
+                                    @if (item.Health > 0)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Strength)
+                                    }
+                                </td>
+                                <td class="health">
+                                    @if (item.Health > 0)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Health)
+                                    }
+                                </td>
+                                <td class="rarity @item.Rarity mobileHideSmall">
+                                    <span style="display:none;">@((int)item.Rarity)</span>
+                                    @Html.DisplayFor(modelItem => item.Rarity)
+                                </td>
+                                <td class="mobileHideSmall">
+                                    @Html.DisplayFor(modelItem => item.Type)
+                                </td>
+                                <td class="hidden">
+                                    <div class="cardTemplateTooltip">
+                                        @{Html.RenderPartial("CardView", item);}
+                                    </div>
+                                </td>
+                            </tr>
+                                            }
+                    </tbody>
+                </table>
+            </div>
+         }
     </div>
 </div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            var table = $("#myTable").DataTable({
+                "colReorder": true,
+                "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                "iDisplayLength": 50,
+                "stateSave": true
+            });
+            var filterLinks = $(".filterList a");
+            var filteredData = filterLinks.click(function () {
+                var filterValue = $(this).html();
+                if (filterValue == "Clear")
+                    table.search("").draw();
+                else {
+                    var currentSearch = table.search();
+                    if (!currentSearch.includes(filterValue))
+                        table.search(currentSearch + " " + filterValue).draw();
+                }
+
+            });
+
+            $(document).tooltip(
+                {
+                    items: "#myTable tbody tr td a",
+                    track: true,
+                    tooltipClass: "cardTemplateTooltip",
+                    content: function () {
+                        var element = $(this).parent().parent().find(".cardTemplateTooltip");
+
+                        return element.html();
+                    }
+                });
+        });
+    </script>
+}
+
+

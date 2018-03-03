@@ -150,7 +150,7 @@
         }
 
         function bindTableTooltips(){
-            $(document).tooltip({
+            $("#AvailableCards").tooltip({
                 items: "#AvailableCards tbody tr td a",
                 track: true,
                 tooltipClass: "cardTemplateTooltip",
@@ -205,8 +205,8 @@
                         $("#DeckCardSummary").html(html);
                         bindSummaryTooltips();
                         bindRemoveButtons();
-                        reloadDeckGoldSummary();
-                        loadAvailableCards();
+                        reloadDeckGoldSummary();                        
+                        loadAvailableCards();                        
                     }
                 });
 
@@ -228,8 +228,7 @@
                     success: function (html) {
                         $("#DeckCardSummary").html(html);
                         bindSummaryTooltips();
-                        bindRemoveButtons();
-
+                        bindRemoveButtons();                        
                         loadAvailableCards();
                     }
                 });
@@ -276,6 +275,10 @@
             } else if (sel.options[sel.selectedIndex].text == 'PVP') {
                 $('#deckArenaPVPDiv').removeClass('hidden')                
             }
+        });
+
+        $(document).ajaxStop(function () {
+            bindTableTooltips();
         });
     </script>
 }

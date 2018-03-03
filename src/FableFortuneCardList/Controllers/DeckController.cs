@@ -32,7 +32,7 @@ namespace FableFortuneCardList.Controllers
             _userManager = userManager;
 
             // Expose Enums to views
-            _classList = Enum.GetValues(typeof(ClassType)).Cast<ClassType>().Where(e => e != ClassType.Neutral).Select(e => new SelectListItem
+            _classList = Enum.GetValues(typeof(ClassType)).Cast<ClassType>().Where(e => e != ClassType.Neutral && e != ClassType.Trophy && e != ClassType.Quest).Select(e => new SelectListItem
             {
                 Value = ((int)e).ToString(),
                 Text = e.ToString()

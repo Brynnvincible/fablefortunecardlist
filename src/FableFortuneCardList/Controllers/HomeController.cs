@@ -17,5 +17,10 @@ namespace FableFortuneCardList.Controllers
         {
             return View();
         }
+
+        public IActionResult PrivacyAndToS()
+        {
+            return View();
+        }
     }
 }

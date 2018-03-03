@@ -60,6 +60,27 @@
                 <input type="submit" value="Check URLs" style="margin-left:20px"/>
             </div>
         </form>
+        <br />
+        <form method="post" asp-action="DeleteAllImages" asp-controller="Import" enctype="multipart/form-data">
+            <h4>Delete card images from wwwroot:</h4>
+            <div class="form-group">
+                <input type="submit" value="Delete Card Images" style="margin-left:20px" />
+            </div>
+        </form>
+        <br />
+        <form method="post" asp-action="CleanupImportExportDirs" asp-controller="Import" enctype="multipart/form-data">
+            <h4>Cleanup files from Import/Export dirs:</h4>
+            <div class="form-group">
+                <input type="submit" value="Cleanup Import/Export" style="margin-left:20px" />
+            </div>
+        </form>
+        <br />
+        <form method="post" asp-action="SendVerificationEmails" asp-controller="Import" enctype="multipart/form-data">
+            <h4>Send Verification Emails:</h4>
+            <div class="form-group">
+                <input type="submit" value="SendVerificationEmails" style="margin-left:20px" />
+            </div>
+        </form>        
     </div>
 </div>
 <script type='text/javascript'>
