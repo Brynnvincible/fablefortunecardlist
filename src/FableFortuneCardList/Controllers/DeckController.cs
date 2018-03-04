@@ -1,17 +1,17 @@
+using FableFortuneCardList.Data;
+using FableFortuneCardList.Enums;
+using FableFortuneCardList.Models;
+using FableFortuneCardList.Models.DeckViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using FableFortuneCardList.Models;
-using FableFortuneCardList.Data;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using FableFortuneCardList.Enums;
-using FableFortuneCardList.Models.DeckViewModels;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FableFortuneCardList.Controllers
 {
@@ -314,7 +314,7 @@ namespace FableFortuneCardList.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Vote()
+        public IActionResult Vote()
         {
             return RedirectToAction("Index");
         }

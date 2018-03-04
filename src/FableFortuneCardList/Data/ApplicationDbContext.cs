@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using FableFortuneCardList.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using FableFortuneCardList.Models;
-using FableFortuneCardList.Models.UserManagerViewModels;
 
 namespace FableFortuneCardList.Data
 {

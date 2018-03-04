@@ -1,14 +1,14 @@
+using FableFortuneCardList.Models;
+using FableFortuneCardList.Models.UserManagerViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
-using FableFortuneCardList.Models;
-using FableFortuneCardList.Models.UserManagerViewModels;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authorization;
 
 namespace FableFortuneCardList.Controllers
 {
@@ -36,6 +36,7 @@ namespace FableFortuneCardList.Controllers
                 Email = u.Email,
                 RoleName = roleManager.Roles.Single(x => x.Id == u.Roles.Single().RoleId).Name
             }).ToList();
+
             return View(model);
         }
 
@@ -92,6 +93,7 @@ namespace FableFortuneCardList.Controllers
             if (!String.IsNullOrEmpty(id))
             {
                 ApplicationUser user = await userManager.FindByIdAsync(id);
+
                 if (user != null)
                 {
                     model.UserName = user.UserName;
@@ -99,7 +101,8 @@ namespace FableFortuneCardList.Controllers
                     model.ApplicationRoleId = roleManager.Roles.Any() ? roleManager.Roles.Single(r => r.Name == userManager.GetRolesAsync(user).Result.Single()).Id : null;
                 }
             }
-            return PartialView("_EditUser", model);
+
+            return PartialView("_EditUser", model);            
         }
 
         [HttpPost]

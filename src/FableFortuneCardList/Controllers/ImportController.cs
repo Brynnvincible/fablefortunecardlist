@@ -1,21 +1,20 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using System.IO;
-using OfficeOpenXml;
-using FableFortuneCardList.Models;
 using FableFortuneCardList.Data;
 using FableFortuneCardList.Enums;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using System.Data;
-using System.IO.Compression;
-using FableFortuneCardList.Shared;
-using Microsoft.AspNetCore.Identity;
+using FableFortuneCardList.Models;
 using FableFortuneCardList.Services;
+using FableFortuneCardList.Shared;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace FableFortuneCardList.Controllers
 {
@@ -68,7 +67,7 @@ namespace FableFortuneCardList.Controllers
 
         [HttpPost]
         [DisableRequestSizeLimit]
-        public async Task<IActionResult> UploadImages(IFormFile file)
+        public IActionResult UploadImages(IFormFile file)
         {
             if(file.Length > 0)
             {                
@@ -114,7 +113,7 @@ namespace FableFortuneCardList.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> FixSheetIdsAction()
+        public IActionResult FixSheetIdsAction()
         {
             int highestId = FixSheetIds();
 
@@ -122,7 +121,7 @@ namespace FableFortuneCardList.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteAllImages()
+        public IActionResult DeleteAllImages()
         {
             long totalSize = 0;
             List<string> filenames = new List<string>();
@@ -152,7 +151,7 @@ namespace FableFortuneCardList.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CleanupImportExportDirs()
+        public IActionResult CleanupImportExportDirs()
         {
             long totalSize = 0;
             List<string> filenames = new List<string>();

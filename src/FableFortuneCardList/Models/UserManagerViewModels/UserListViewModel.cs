@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace FableFortuneCardList.Models.UserManagerViewModels
+﻿namespace FableFortuneCardList.Models.UserManagerViewModels
 {
     public class UserListViewModel
     {
