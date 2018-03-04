@@ -74,12 +74,8 @@ table.dataTable tbody tr {
 
 .panel-body{
     background-color: #a89167;
-    border-radius: 8px;
     box-shadow: 0px 0px 10px rgba(0,0,0,0.8);
-    padding-top: 10px;
-    padding-bottom: 20px;
-    padding-left: 25px;
-    padding-right: 20px;
+    padding: 10px 20px 20px 25px;
     background-image: url(/images/Large_ET-191.png);
     background-position: center;
 
@@ -802,5 +798,9 @@ textarea {
 
 .hero-text {
     min-height: 130px;
+}
+
+.filter-height {
+    min-height: 100px;
 }
 

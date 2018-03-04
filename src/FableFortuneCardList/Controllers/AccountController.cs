@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using FableFortuneCardList.Enums;
+using FableFortuneCardList.Models;
+using FableFortuneCardList.Models.AccountViewModels;
+using FableFortuneCardList.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using FableFortuneCardList.Models;
-using FableFortuneCardList.Models.AccountViewModels;
-using FableFortuneCardList.Services;
-using FableFortuneCardList.Enums;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace FableFortuneCardList.Controllers
 {
@@ -109,6 +107,12 @@ namespace FableFortuneCardList.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult RegisterSuccessful()
+        {
+            return View();
+        }
+
         //
         // GET: /Account/Register
         [HttpGet]
@@ -143,7 +147,7 @@ namespace FableFortuneCardList.Controllers
                     await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("RegisterSuccessful");
                 }
                 AddErrors(result);
             }
@@ -196,7 +200,7 @@ namespace FableFortuneCardList.Controllers
             // Sign in the user with this external login provider if the user already has a login.
             var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false);
             if (result.Succeeded)
-            {
+            {                
                 _logger.LogInformation(5, "User logged in with {Name} provider.", info.LoginProvider);
                 return RedirectToLocal(returnUrl);
             }
@@ -241,11 +245,20 @@ namespace FableFortuneCardList.Controllers
                     result = await _userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {
+                        await _userManager.AddToRoleAsync(user, "User");
+
+                        // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
+                        // Send an email with this link
+                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                        await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         _logger.LogInformation(6, "User created an account using {Name} provider.", info.LoginProvider);
-                        return RedirectToLocal(returnUrl);
+                        return RedirectToAction("RegisterSuccessful");
                     }
                 }
+
+
                 AddErrors(result);
             }
 
@@ -268,6 +281,14 @@ namespace FableFortuneCardList.Controllers
                 return View("Error");
             }
             var result = await _userManager.ConfirmEmailAsync(user, code);
+            if (result.Succeeded)
+            {
+                IdentityResult roleResult = await _userManager.RemoveFromRoleAsync(user, Roles.USER.ToString());
+                if (roleResult.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(user, Roles.DECKMASTER.ToString());
+                }
+            }
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 

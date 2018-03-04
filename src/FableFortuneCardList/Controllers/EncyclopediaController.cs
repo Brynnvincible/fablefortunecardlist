@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using FableFortuneCardList.Data;
 using Microsoft.AspNetCore.Mvc;
-using FableFortuneCardList.Data;
+using System.Linq;
 
 namespace FableFortuneCardList.Controllers
 {
