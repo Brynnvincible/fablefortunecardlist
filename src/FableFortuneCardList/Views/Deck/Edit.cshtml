@@ -1,5 +1,4 @@
 @model FableFortuneCardList.Models.DeckViewModels.EditDeckViewModel
-@using FableFortuneCardList.Enums
 @{
     ViewData["Title"] = "Edit";
 }
@@ -62,7 +61,7 @@
                     </div>
                     <div class="gold-summary col-md-6">
                         <div id="DeckSummary">
-                            @{Html.RenderPartial("DeckGoldSummary", Model.Deck);}
+                            @{Html.RenderPartial("DeckGoldSummary", Model.Deck);} 
                         </div>
                     </div>
                 </div>
@@ -96,7 +95,7 @@
 </div>
 <div class="col-md-2">
     <div id="DeckCardSummary">
-        @{Html.RenderPartial("DeckCardSummary", Model.Deck);}
+        @{Html.RenderPartial("DeckCardSummary", Model.Deck);} 
     </div>     
 </div>
 <div class="clearfix"></div>
@@ -206,7 +205,7 @@
                         bindSummaryTooltips();
                         bindRemoveButtons();
                         reloadDeckGoldSummary();                        
-                        loadAvailableCards();                        
+                        loadAvailableCards();                         
                     }
                 });
 
@@ -275,10 +274,6 @@
             } else if (sel.options[sel.selectedIndex].text == 'PVP') {
                 $('#deckArenaPVPDiv').removeClass('hidden')                
             }
-        });
-
-        $(document).ajaxStop(function () {
-            bindTableTooltips();
         });
     </script>
 }

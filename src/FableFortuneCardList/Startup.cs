@@ -79,7 +79,7 @@ namespace FableFortuneCardList
                         {
                             facebookOptions.AppId = Environment.GetEnvironmentVariable("Authentication:Facebook:AppId");
                             facebookOptions.AppSecret = Environment.GetEnvironmentVariable("Authentication:Facebook:AppSecret");
-                        });    
+                        });
 
             services.AddMvc();
 
@@ -119,9 +119,7 @@ namespace FableFortuneCardList
             }
 
             app.UseStaticFiles();
-
             app.UseAuthentication();
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

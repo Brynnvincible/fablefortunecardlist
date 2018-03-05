@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
@@ -483,6 +484,34 @@ namespace FableFortuneCardList.Controllers
             }
 
             return View("UploadResult", msg);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdatedCompletedDecksField()
+        {
+            int decksUpdated = 0;
+            List<Deck> decks = _context.Deck.Include(x => x.DeckCards).ToList();
+            foreach(Deck d in decks)
+            {
+                if(d.DeckCards.Count == 31 && d.Completed == false)
+                {
+                    d.Completed = true;
+                    decksUpdated++;
+                }
+            }
+
+            string msg = string.Empty;
+            if (decksUpdated > 0)
+            {
+                await _context.SaveChangesAsync();
+                msg = string.Format("{0} decks were updated.", decksUpdated);
+            }
+            else
+            {
+                msg = "No decks needed to be updated.";
+            }
+
+            return (View("UploadResult", msg));
         }
 
         private int FixSheetIds()

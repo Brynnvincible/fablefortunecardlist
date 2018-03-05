@@ -1,6 +1,5 @@
 @model FableFortuneCardList.Models.DeckViewModels.EditDeckViewModel
 @using FableFortuneCardList.Enums
-@using System.IO;
 
 <h3>Available Cards</h3>
 <table class="table" id="AvailableCards">
@@ -70,7 +69,7 @@
                     @Html.DisplayFor(modelItem => item.Type)
                 </td>
                 <td>
-                    @await Component.InvokeAsync("DeckAddCardButton", new { deckId = Model.ID, cardId = item.ID })
+                    @await Component.InvokeAsync("DeckAddCardButton", new { deckId = Model.ID, cardId = item.ID, cardClass = item.Class, cardName = item.Name, cardRarity = item.Rarity })
                 </td>
 
                 <td class="hidden">
@@ -79,6 +78,6 @@
                     </div>
                 </td>
             </tr>
-                            }
+        }
     </tbody>
 </table>

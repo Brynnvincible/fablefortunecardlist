@@ -18,20 +18,19 @@ namespace FableFortuneCardList.ViewComponents
             _context = context;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(int deckId, int cardId)
+        public async Task<IViewComponentResult> InvokeAsync(int deckId, int cardId, ClassType cardClass, string cardName, RarityType cardRarity)
         {
-            Deck deck = await _context.Deck.FirstOrDefaultAsync(x => x.ID == deckId);
-            Card card = await _context.Card.FirstOrDefaultAsync(x => x.ID == cardId);
+            Deck deck = await _context.Deck.FirstOrDefaultAsync(x => x.ID == deckId);            
             var isDisabled = false;
 
-            if ((deck.DeckCards.Count(x => x.CardId == card.ID) >= 2 || (deck.DeckCards.Count(x => x.Card.Class != ClassType.Trophy) >= 30)) ||
-                      (deck.DeckCards.Count(x => x.Card.Class == ClassType.Trophy) >= 1 && card.Class == ClassType.Trophy) ||
-                        (deck.DeckCards.Count(x => x.Card.Name == card.Name) >= 1 && card.Rarity == RarityType.Fabled))
+            if ((deck.DeckCards.Count(x => x.CardId == cardId) >= 2 || (deck.DeckCards.Count(x => x.Card.Class != ClassType.Trophy) >= 30)) ||
+                      (deck.DeckCards.Count(x => x.Card.Class == ClassType.Trophy) >= 1 && cardClass == ClassType.Trophy) ||
+                        (deck.DeckCards.Count(x => x.Card.Name == cardName) >= 1 && cardRarity == RarityType.Fabled))
             {
                 isDisabled = true;
             }
 
-            if(deck.DeckCards.Count(x => x.Card.Class == ClassType.Trophy) < 1 && card.Class == ClassType.Trophy)
+            if(deck.DeckCards.Count(x => x.Card.Class == ClassType.Trophy) < 1 && cardClass == ClassType.Trophy)
             {
                 isDisabled = false;
             }
@@ -39,7 +38,6 @@ namespace FableFortuneCardList.ViewComponents
             var viewModel = new DeckAddCardButtonViewModel();
             viewModel.CardID = cardId;
             viewModel.IsDisabled = isDisabled;
-
             return View(viewModel);
         }
     }

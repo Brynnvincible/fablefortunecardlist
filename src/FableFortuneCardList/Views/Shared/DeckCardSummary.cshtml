@@ -1,4 +1,5 @@
 @model FableFortuneCardList.Models.Deck
+@using FableFortuneCardList.Models.DeckViewModels
 @using FableFortuneCardList.Enums
 <h3>Deck Cards</h3>
 
@@ -6,12 +7,23 @@
     <h4>Trophy: @Model.DeckCards.Count(x => x.Card.Class == ClassType.Trophy)/1</h4>
     @foreach (var card in Model.DeckCards.Where(x => x.Card.Class == ClassType.Trophy).GroupBy(x => x.Card.Name).Select(g => g.First()).ToList())
     {
-        Html.RenderPartial("DeckCardEditView", card);
+        DeckCardEditViewModel deckCardModel = new DeckCardEditViewModel {
+            Card = card.Card,
+            DeckCardID = card.Id,
+            CardCount = Model.DeckCards.Count(x => x.CardId == card.Card.ID)
+        };
+        Html.RenderPartial("DeckCardEditView", deckCardModel);
     }
     <h4>Deck: <span class="deckCount">@Model.DeckCards.Count(x=>x.Card.Class != ClassType.Trophy)</span>/30</h4>
-    @foreach (var card in Model.DeckCards.Where(x => x.Card.Class != ClassType.Trophy).OrderBy(x => x.Card.Gold).GroupBy(x => x.Card.Name).Select(g => g.First()).ToList())
+    @foreach (var card in Model.DeckCards.Where(x => x.Card.Class != ClassType.Trophy).OrderBy(x => x.Card.Name).OrderBy(x => x.Card.Gold).GroupBy(x => x.Card.Name).Select(g => g.First()).ToList())
     {
-        Html.RenderPartial("DeckCardEditView", card);
+        DeckCardEditViewModel deckCardModel = new DeckCardEditViewModel
+        {
+            Card = card.Card,
+            DeckCardID = card.Id,
+            CardCount = Model.DeckCards.Count(x => x.CardId == card.Card.ID)
+        };
+        Html.RenderPartial("DeckCardEditView", deckCardModel);
     }
 </div>
    

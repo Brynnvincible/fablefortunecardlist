@@ -76,29 +76,24 @@ namespace FableFortuneCardList.Controllers
                 return NotFound();
             }
 
-            var viewModel = new EditDeckViewModel();
-
-            viewModel.AvailableCards = _context.Card.ToList();
-
             var deck = await _context.Deck.Include(x => x.DeckCards).SingleOrDefaultAsync(m => m.ID == id);
 
-            viewModel.ID = deck.ID;
-            viewModel.Deck = deck;
-            viewModel.Name = deck.Name;
-            viewModel.Description = deck.Description;
-            viewModel.Class = deck.Class;
-
-            if (deck == null)
+            var viewModel = new EditDeckViewModel
             {
-                return NotFound();
-            }
+                ID = deck.ID,
+                Deck = deck,
+                Name = deck.Name,
+                Description = deck.Description,
+                Class = deck.Class,
+                AvailableCards = _context.Card.ToList()
+            };
 
             return PartialView("DeckAvailableCards", viewModel);
         }
        
         public async Task<IActionResult> Details(int id)
         {
-            var deck = await _context.Deck.Include(x=>x.CreatedBy).Include(x=>x.DeckCards).ThenInclude(x=>x.Card).FirstOrDefaultAsync(x => x.ID == id);
+            var deck = await _context.Deck.Include(x=>x.CreatedBy).Include(x=>x.DeckCards).ThenInclude(x=>x.Card).SingleAsync(x => x.ID == id);
 
             return View(deck);
         }
@@ -107,15 +102,17 @@ namespace FableFortuneCardList.Controllers
         [Authorize(Roles = "DeckMaster, Admin")]
         public async Task<IActionResult> AddCard(int deckId, int cardId)
         {
-            var deckCard = new DeckCard();
+            var deckCard = new DeckCard();            
             deckCard.DeckId = deckId;
             deckCard.CardId = cardId;
-
             _context.Add(deckCard);
             await _context.SaveChangesAsync();
-
-            var deck = await _context.Deck.Include(x => x.DeckCards).ThenInclude(x => x.Card).FirstOrDefaultAsync(x => x.ID == deckId);
-
+            var deck = await _context.Deck.Include(x => x.DeckCards).ThenInclude(x => x.Card).SingleAsync(x => x.ID == deckId);
+            if (deck.DeckCards.Count == 31)
+            {
+                deck.Completed = true;
+                await _context.SaveChangesAsync();
+            }            
             return PartialView("DeckCardSummary", deck);
         }
         
@@ -124,12 +121,17 @@ namespace FableFortuneCardList.Controllers
         public async Task<IActionResult> RemoveCard(int deckCardId)
         {
             DeckCard deckCard = _context.DeckCard.SingleOrDefault(m => m.Id == deckCardId);
-
+            if (deckCard != null)
+            {
+                return NotFound();
+            }
+            var deck = await _context.Deck.Include(x => x.DeckCards).ThenInclude(x => x.Card).SingleAsync(x => x.ID == deckCard.DeckId);
             _context.Remove(deckCard);
+            if (deck.Completed)
+            {
+                deck.Completed = false;
+            }
             await _context.SaveChangesAsync();
-
-            var deck = await _context.Deck.Include(x => x.DeckCards).ThenInclude(x => x.Card).FirstOrDefaultAsync(x => x.ID == deckCard.DeckId);
-
             return PartialView("DeckCardSummary", deck);
         }
 
@@ -172,7 +174,10 @@ namespace FableFortuneCardList.Controllers
                 {
                     deck.ArenaCoop = DeckArenaCoop.None;
                 }
-                deck.Strategy = deck.Strategy.Replace("<", "").Replace(">", "");
+                if (deck.Strategy.Length > 0)
+                {
+                    deck.Strategy = deck.Strategy.Replace("<", "").Replace(">", "");
+                }
                 _context.Add(deck);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Edit", new { Id = deck.ID });
@@ -189,26 +194,26 @@ namespace FableFortuneCardList.Controllers
                 return NotFound();
             }
 
-            var viewModel = new EditDeckViewModel();
-
-            viewModel.AvailableCards = _context.Card.ToList();
-
-            var deck = await _context.Deck.Include(x=>x.DeckCards).SingleOrDefaultAsync(m => m.ID == id);
+            var deck = await _context.Deck.Include(x => x.DeckCards).SingleOrDefaultAsync(m => m.ID == id);
 
             if (deck == null)
             {
                 return NotFound();
             }
 
-            viewModel.ID = deck.ID;
-            viewModel.Deck = deck;
-            viewModel.Name = deck.Name;
-            viewModel.Description = deck.Description;
-            viewModel.Strategy = deck.Strategy;
-            viewModel.Type = deck.Type;
-            viewModel.ArenaCoop = deck.ArenaCoop;
-            viewModel.ArenaPVP = deck.ArenaPVP;
-            viewModel.Class = deck.Class;
+            var viewModel = new EditDeckViewModel
+            {
+                ID = deck.ID,
+                Deck = deck,
+                Name = deck.Name,
+                Description = deck.Description,
+                Strategy = deck.Strategy,
+                Type = deck.Type,
+                ArenaCoop = deck.ArenaCoop,
+                ArenaPVP = deck.ArenaPVP,
+                Class = deck.Class,
+                AvailableCards = _context.Card.ToList()
+            };
 
             ViewBag.ClassList = _classList;
             ViewBag.DeckTypeList = _deckTypeList;
@@ -242,7 +247,10 @@ namespace FableFortuneCardList.Controllers
                 {
                     deck.ArenaCoop = DeckArenaCoop.None;
                 }
-                deck.Strategy = deck.Strategy.Replace("<", "").Replace(">", "");
+                if (deck.Strategy.Length > 0)
+                {
+                    deck.Strategy = deck.Strategy.Replace("<", "").Replace(">", "");
+                }
                 try
                 {
                     _context.Update(deck);
@@ -261,16 +269,16 @@ namespace FableFortuneCardList.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            var viewModel = new EditDeckViewModel();
-
-            viewModel.AvailableCards = _context.Card.ToList();
-
-            viewModel.ID = deck.ID;
-            viewModel.Deck = deck;
-            viewModel.Name = deck.Name;
-            viewModel.Description = deck.Description;
-            viewModel.Strategy = deck.Strategy;
-            viewModel.Class = deck.Class;
+            var viewModel = new EditDeckViewModel
+            {
+                ID = deck.ID,
+                Deck = deck,
+                Name = deck.Name,
+                Description = deck.Description,
+                Strategy = deck.Strategy,
+                Class = deck.Class,
+                AvailableCards = _context.Card.ToList()
+            };
 
             return View(viewModel);
         }
