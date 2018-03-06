@@ -32,7 +32,7 @@ namespace FableFortuneCardList.Controllers
             _userManager = userManager;
 
             // Expose Enums to views
-            _classList = Enum.GetValues(typeof(ClassType)).Cast<ClassType>().Where(e => e != ClassType.Neutral && e != ClassType.Trophy && e != ClassType.Quest).Select(e => new SelectListItem
+            _classList = Enum.GetValues(typeof(ClassType)).Cast<ClassType>().Where(e => e != ClassType.Neutral && e != ClassType.Trophy && e != ClassType.Quest && e != ClassType.None).Select(e => new SelectListItem
             {
                 Value = ((int)e).ToString(),
                 Text = e.ToString()
@@ -85,7 +85,7 @@ namespace FableFortuneCardList.Controllers
                 Name = deck.Name,
                 Description = deck.Description,
                 Class = deck.Class,
-                AvailableCards = _context.Card.ToList()
+                AvailableCards = _context.Card.OrderBy(x => x.Name).OrderBy(x => x.Gold).ToList()
             };
 
             return PartialView("DeckAvailableCards", viewModel);
@@ -121,7 +121,7 @@ namespace FableFortuneCardList.Controllers
         public async Task<IActionResult> RemoveCard(int deckCardId)
         {
             DeckCard deckCard = _context.DeckCard.SingleOrDefault(m => m.Id == deckCardId);
-            if (deckCard != null)
+            if (deckCard == null)
             {
                 return NotFound();
             }
@@ -174,7 +174,7 @@ namespace FableFortuneCardList.Controllers
                 {
                     deck.ArenaCoop = DeckArenaCoop.None;
                 }
-                if (deck.Strategy.Length > 0)
+                if (deck.Strategy != null)
                 {
                     deck.Strategy = deck.Strategy.Replace("<", "").Replace(">", "");
                 }
@@ -212,7 +212,7 @@ namespace FableFortuneCardList.Controllers
                 ArenaCoop = deck.ArenaCoop,
                 ArenaPVP = deck.ArenaPVP,
                 Class = deck.Class,
-                AvailableCards = _context.Card.ToList()
+                AvailableCards = _context.Card.OrderBy(x => x.Name).OrderBy(x => x.Gold).ToList()
             };
 
             ViewBag.ClassList = _classList;
@@ -247,7 +247,7 @@ namespace FableFortuneCardList.Controllers
                 {
                     deck.ArenaCoop = DeckArenaCoop.None;
                 }
-                if (deck.Strategy.Length > 0)
+                if (deck.Strategy != null)
                 {
                     deck.Strategy = deck.Strategy.Replace("<", "").Replace(">", "");
                 }

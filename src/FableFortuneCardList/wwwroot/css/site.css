@@ -804,3 +804,7 @@ textarea {
     min-height: 100px;
 }
 
+.deck-filter-height {
+    min-height: 70px;
+}
+
