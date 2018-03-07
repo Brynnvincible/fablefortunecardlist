@@ -322,41 +322,46 @@ div.cost{
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6b501d', endColorstr='#6b501d',GradientType=1 ); /* IE6-9 */
 }
 
-        .deckCard {
-            position: relative;
-            float:left;
-            margin:3px;
-            box-shadow: 2px 2px 10px rgba(0,0,0,.5);
-            border-radius: 5px;
-        }
+.deckCard {
+    position: relative;
+    float:left;
+    margin:3px;
+    box-shadow: 2px 2px 10px rgba(0,0,0,.5);
+    border-radius: 5px;
+}
 
-        .deckCardCount{
-            position:absolute;
-            left: -20px;
-            bottom: 2px;
-            color:#fff;
-            text-shadow:5px 5px 5px rgba(0,0,0,0.8);
-        }
+.deckCardContainer {
+    position: relative;
+    float: left;
+}
 
-        .deckCardRemoveButton{
-            position:absolute;
-            right:0px;
-            top:0px;
-        }
+.deckCardCount{
+    position:absolute;
+    left: -20px;
+    bottom: 2px;
+    color:#fff;
+    text-shadow:5px 5px 5px rgba(0,0,0,0.8);
+}
 
-        .deckCardRemoveButton .btn{
-            background-color: rgba(0,0,0,0);
-            border:none;
-            width:15px;
-            height:15px;
-            background-image: url(../images/delete-2-xxl.png);
-            background-size:contain;
-            background-repeat:no-repeat;
-            top: 5px;
-            right: -20px;
-            position:relative;
-            padding:0px;
-        }
+.deckCardRemoveButton{
+    position:absolute;
+    right:0px;
+    top:4px;
+}
+
+.deckCardRemoveButton .btn{
+    background-color: rgba(0,0,0,0);
+    border:none;
+    width:15px;
+    height:15px;
+    background-image: url(../images/delete-2-xxl.png);
+    background-size:contain;
+    background-repeat:no-repeat;
+    top: 5px;
+    right: -23px;
+    position:relative;
+    padding:0px;
+}
 
 
 

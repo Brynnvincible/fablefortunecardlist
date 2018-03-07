@@ -1,14 +1,15 @@
 @model FableFortuneCardList.Models.DeckViewModels.DeckCardEditViewModel;
 
-<div class="deckCard">
-    @{Html.RenderPartial("DeckCardView", Model.Card);}
-    @if (Model.CardCount > 1)
-    {
-        string count = "x" + Model.CardCount;
-        <span class="deckCardCount">@count</span>
+<div class="deckCardContainer">
+    <div class="deckCard">
+        @{Html.RenderPartial("DeckCardView", Model.Card);}
+        @if (Model.CardCount > 1)
+        {
+            string count = "x" + Model.CardCount;
+            <span class="deckCardCount">@count</span>
 
-    }
-
+        }
+    </div>
     @if (Context.Request.Path.Value.Contains("Edit") || Context.Request.Path.Value.Contains("AddCard") || Context.Request.Path.Value.Contains("RemoveCard"))
     {
         <div class="deckCardRemoveButton">
