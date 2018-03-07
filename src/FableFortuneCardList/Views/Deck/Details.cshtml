@@ -31,7 +31,10 @@
             </div>
             <hr />
             <h3>Strategy:</h3>
-            <p>@Html.Raw(Model.Strategy.Replace(Environment.NewLine, "<br />"))</p>
+            @if (Model.Strategy != null)
+            {
+                <p>@Html.Raw(Model.Strategy.Replace(Environment.NewLine, "<br />"))</p>
+            }
             <hr />
             @foreach (var card in Model.DeckCards.OrderBy(x => x.Card.Gold))
             {

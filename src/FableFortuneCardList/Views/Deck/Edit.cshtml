@@ -168,7 +168,7 @@
                     $("#AvailableCardsTable").html(html);
                     bindAddButtons();
                     bindAvailableCardsTable();
-
+                    bindTableTooltips();
 
                 }
             });
@@ -227,7 +227,7 @@
                     success: function (html) {
                         $("#DeckCardSummary").html(html);
                         bindSummaryTooltips();
-                        bindRemoveButtons();                        
+                        bindRemoveButtons();                             
                         loadAvailableCards();
                     }
                 });

@@ -125,8 +125,8 @@ namespace FableFortuneCardList.Controllers
             {
                 return NotFound();
             }
-            var deck = await _context.Deck.Include(x => x.DeckCards).ThenInclude(x => x.Card).SingleAsync(x => x.ID == deckCard.DeckId);
             _context.Remove(deckCard);
+            var deck = await _context.Deck.Include(x => x.DeckCards).ThenInclude(x => x.Card).SingleAsync(x => x.ID == deckCard.DeckId);            
             if (deck.Completed)
             {
                 deck.Completed = false;
@@ -251,6 +251,15 @@ namespace FableFortuneCardList.Controllers
                 {
                     deck.Strategy = deck.Strategy.Replace("<", "").Replace(">", "");
                 }
+                var deckCompleted = _context.DeckCard.Where(x => x.DeckId == deck.ID).Count();
+                if (deckCompleted == 31)
+                {
+                    deck.Completed = true;                    
+                }
+                else
+                {
+                    deck.Completed = false;
+                }
                 try
                 {
                     _context.Update(deck);
@@ -350,10 +359,12 @@ namespace FableFortuneCardList.Controllers
             else
             {
                 // New deck ranking
-                var deckRanking = new DeckRanking();
-                deckRanking.DeckID = deckId;
-                deckRanking.UserID = user.Id;
-                deckRanking.Ranking = voteType;
+                var deckRanking = new DeckRanking
+                {
+                    DeckID = deckId,
+                    UserID = user.Id,
+                    Ranking = voteType
+                };
 
                 _context.Add(deckRanking);
                 await _context.SaveChangesAsync();
