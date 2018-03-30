@@ -92,18 +92,24 @@
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.ArenaPVP)
-                    </th>
-                    <th class="created-by">Created By</th>
-                    <th>Gold Summary</th>
+                    </th>                    
+                    <th>Ink</th>
+                    <th class="created-by">Created By</th>                    
+                    <th>Curve</th>
                     <th>Rating</th>
+                    <th></th>                    
+                    <th>Ver</th>
                     <th></th>
-                    <th></th>
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <th></th>
+                    }
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
-                    if (item.Completed || (User.Identity.IsAuthenticated && item.CreatedBy.Id == ViewData["currentUserId"].ToString()))
+                    if ((item.Completed && !item.Private) || (User.Identity.IsAuthenticated && item.CreatedBy.Id == ViewData["currentUserId"].ToString()) || (User.Identity.IsAuthenticated && User.IsInRole("Admin")))
                     {
                         <tr>
                             <td>
@@ -131,6 +137,9 @@
                                         @Html.DisplayFor(modelItem => item.ArenaPVP)
                                     }
                                 }                                
+                            </td>                            
+                            <td>
+                                @item.GetInkCost()
                             </td>
                             <td>@item.CreatedBy.UserName</td>
                             <td>
@@ -139,52 +148,55 @@
                             <td>
                                 @((item.DeckRankings.Select(x => x.Ranking).Where(x => x == 1).Count()) - (item.DeckRankings.Select(x => x.Ranking).Where(x => x == -1).Count()))
                             </td>
-                                <td>
-                                    <div class="row">
-                                        <div>
-                                            @{
-                                                if (User.Identity.IsAuthenticated && (User.IsInRole("DeckMaster") || User.IsInRole("Admin")))
+                            <td>
+                                <div class="row">
+                                    <div>
+                                        @{
+                                            if (User.Identity.IsAuthenticated && (User.IsInRole("DeckMaster") || User.IsInRole("Admin")))
+                                            {
+                                                var arrowClassUp = "vote-button-not-voted";
+                                                var userDeckRanking = item.DeckRankings.FirstOrDefault(x => x.UserID == ViewData["currentUserId"].ToString());
+                                                if (userDeckRanking != null)
                                                 {
-                                                    var arrowClassUp = "vote-button-not-voted";
-                                                    var userDeckRanking = item.DeckRankings.FirstOrDefault(x => x.UserID == ViewData["currentUserId"].ToString());
-                                                    if (userDeckRanking != null)
+                                                    if (userDeckRanking.Ranking == 1)
                                                     {
-                                                        if (userDeckRanking.Ranking == 1)
-                                                        {
-                                                            arrowClassUp = "vote-button-voted link-disabled";
-                                                        }
+                                                        arrowClassUp = "vote-button-voted link-disabled";
                                                     }
-                                                    <a id="voteUp" href="@Url.Action("Vote", "Deck")" data-vote-type=1 data-itemid="@item.ID" class="vote-button @arrowClassUp">⇧</a>
                                                 }
-                                                else
-                                                {
-                                                    <a id="voteUp" class="vote-button link-disabled">⇧</a>
-                                                }
+                                                <a id="voteUp" href="@Url.Action("Vote", "Deck")" data-vote-type=1 data-itemid="@item.ID" class="vote-button @arrowClassUp">⇧</a>
                                             }
-                                        </div>
-                                        <div>
-                                            @{
-                                                if (User.Identity.IsAuthenticated && (User.IsInRole("DeckMaster") || User.IsInRole("Admin")))
-                                                {
-                                                    var arrowClassDown = "vote-button-not-voted";
-                                                    var userDeckRanking = item.DeckRankings.FirstOrDefault(x => x.UserID == ViewData["currentUserId"].ToString());
-                                                    if (userDeckRanking != null)
-                                                    {
-                                                        if (userDeckRanking.Ranking == -1)
-                                                        {
-                                                            arrowClassDown = "vote-button-voted link-disabled";
-                                                        }
-                                                    }
-                                                    <a id="voteDown" href="@Url.Action("Vote", "Deck")" data-vote-type=-1 data-itemid="@item.ID" class="vote-button @arrowClassDown">⇩</a>
-                                                }
-                                                else
-                                                {
-                                                    <a id="voteDown" class="vote-button link-disabled">⇩</a>
-                                                }
+                                            else
+                                            {
+                                                <a id="voteUp" class="vote-button link-disabled">⇧</a>
                                             }
-                                        </div>
+                                        }
                                     </div>
-                                </td>
+                                    <div>
+                                        @{
+                                            if (User.Identity.IsAuthenticated && (User.IsInRole("DeckMaster") || User.IsInRole("Admin")))
+                                            {
+                                                var arrowClassDown = "vote-button-not-voted";
+                                                var userDeckRanking = item.DeckRankings.FirstOrDefault(x => x.UserID == ViewData["currentUserId"].ToString());
+                                                if (userDeckRanking != null)
+                                                {
+                                                    if (userDeckRanking.Ranking == -1)
+                                                    {
+                                                        arrowClassDown = "vote-button-voted link-disabled";
+                                                    }
+                                                }
+                                                <a id="voteDown" href="@Url.Action("Vote", "Deck")" data-vote-type=-1 data-itemid="@item.ID" class="vote-button @arrowClassDown">⇩</a>
+                                            }
+                                            else
+                                            {
+                                                <a id="voteDown" class="vote-button link-disabled">⇩</a>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                @item.GameVersion
+                            </td>
                             <td>   
                                 <a asp-action="Details" asp-route-id="@item.ID">Details</a>
 
@@ -193,7 +205,24 @@
                                     <a asp-action="Edit" asp-route-id="@item.ID">Edit</a>
                                     <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
                                 }
-                            </td>                                               
+                            </td>       
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                            {
+                                string status = string.Empty;
+                                @if(item.Private)
+                                {
+                                    status = "P";
+                                }
+                                if(item.Completed)
+                                {
+                                    status += "C";
+                                }
+                                else
+                                {
+                                    status += "I";
+                                }
+                                <td>@status</td>
+                        }                            
                         </tr>
                     }
                 }
@@ -209,7 +238,7 @@
                 "colReorder": true,
                 "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
                 "iDisplayLength": 50,
-                "order": [[7, "desc"]]
+                "order": [[8, "desc"]]
             });
             var filterLinks = $(".filterList a");
             var filteredData = filterLinks.click(function () {

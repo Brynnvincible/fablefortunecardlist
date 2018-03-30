@@ -2,7 +2,7 @@
 @using FableFortuneCardList.Models.DeckViewModels
 @using FableFortuneCardList.Enums
 <h3>Deck Cards</h3>
-
+<h4>Ink Cost: @Model.GetInkCost()</h4>
 <div class="deckCards">
     <h4>Trophy: @Model.DeckCards.Count(x => x.Card.Class == ClassType.Trophy)/1</h4>
     @foreach (var card in Model.DeckCards.Where(x => x.Card.Class == ClassType.Trophy).GroupBy(x => x.Card.Name).Select(g => g.First()).ToList())

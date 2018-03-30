@@ -71,8 +71,13 @@ namespace FableFortuneCardList.Controllers
         public IActionResult UploadImages(IFormFile file)
         {
             if(file.Length > 0)
-            {                
-                var filename = Path.Combine(_env.WebRootPath, @"Imports\", file.FileName);
+            {
+                var dirInfoImports = new DirectoryInfo(Path.Combine(_env.WebRootPath, @"Imports"));
+                if(!dirInfoImports.Exists)
+                {
+                    dirInfoImports.Create();
+                }
+                var filename = Path.Combine(dirInfoImports.FullName, file.FileName);
                 using (var fileStream = new FileStream(filename, FileMode.Create))
                 {
                     file.CopyTo(fileStream);

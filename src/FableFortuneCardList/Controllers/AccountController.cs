@@ -70,7 +70,7 @@ namespace FableFortuneCardList.Controllers
                     IdentityResult roleResult = await _userManager.RemoveFromRoleAsync(user, Roles.USER.ToString());
                     if (roleResult.Succeeded)
                     {
-                        await _userManager.AddToRoleAsync(user, Roles.DECKMASTER.ToString());
+                        await _userManager.AddToRoleAsync(user, Roles.DECKMASTER.ToString());                        
                     }
                 }
                 
@@ -287,6 +287,7 @@ namespace FableFortuneCardList.Controllers
                 if (roleResult.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, Roles.DECKMASTER.ToString());
+                    await _signInManager.SignInAsync(user, false);
                 }
             }
             return View(result.Succeeded ? "ConfirmEmail" : "Error");

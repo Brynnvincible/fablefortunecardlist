@@ -17,6 +17,8 @@ namespace FableFortuneCardList.Controllers
 {
     public class DeckController : Controller
     {
+        private const string _gameVersion = "1.0.2";        
+
         private readonly ApplicationDbContext _context;
         private IHostingEnvironment _environment;
         private UserManager<ApplicationUser> _userManager;
@@ -158,7 +160,7 @@ namespace FableFortuneCardList.Controllers
         [Authorize(Roles = "DeckMaster, Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID, Name, Description, Strategy, Type, ArenaCoop, ArenaPVP, Class")]Deck deck)
+        public async Task<IActionResult> Create([Bind("ID, Name, Description, Strategy, Type, ArenaCoop, ArenaPVP, Class, Private")]Deck deck)
         {
             deck.CreatedBy = await _userManager.GetUserAsync(User);
 
@@ -178,6 +180,7 @@ namespace FableFortuneCardList.Controllers
                 {
                     deck.Strategy = deck.Strategy.Replace("<", "").Replace(">", "");
                 }
+                deck.GameVersion = _gameVersion;
                 _context.Add(deck);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Edit", new { Id = deck.ID });
@@ -212,6 +215,7 @@ namespace FableFortuneCardList.Controllers
                 ArenaCoop = deck.ArenaCoop,
                 ArenaPVP = deck.ArenaPVP,
                 Class = deck.Class,
+                Private = deck.Private,
                 AvailableCards = _context.Card.OrderBy(x => x.Name).OrderBy(x => x.Gold).ToList()
             };
 
@@ -228,14 +232,14 @@ namespace FableFortuneCardList.Controllers
         [Authorize(Roles = "DeckMaster, Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID, Name, Description, Strategy, Type, ArenaCoop, ArenaPVP, Class")] Deck deck)
+        public async Task<IActionResult> Edit(int id, [Bind("ID, Name, Description, Strategy, Type, ArenaCoop, ArenaPVP, Class, Private")] Deck deck)
         {
             if (id != deck.ID)
             {
                 return NotFound();
             }
 
-            ModelState.Remove("CreatedBy");
+            ModelState.Remove("CreatedBy");            
 
             if (ModelState.IsValid)
             {
@@ -260,6 +264,7 @@ namespace FableFortuneCardList.Controllers
                 {
                     deck.Completed = false;
                 }
+                deck.GameVersion = _gameVersion;
                 try
                 {
                     _context.Update(deck);
@@ -286,6 +291,7 @@ namespace FableFortuneCardList.Controllers
                 Description = deck.Description,
                 Strategy = deck.Strategy,
                 Class = deck.Class,
+                Private = deck.Private,
                 AvailableCards = _context.Card.ToList()
             };
 

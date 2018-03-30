@@ -25,10 +25,10 @@
 
         <div class="col-md-6">
             <h2>Decks</h2>
-            <h4>This card appears in:</h4>
+            <h4>Top 5 decks card appears in:</h4>
 
             <ul>
-                @foreach (var deck in Model.DeckCards.Select(x => x.Deck).Distinct().ToList())
+                @foreach (var deck in Model.DeckCards.Select(x => x.Deck).Where(x => x.Completed && x.Private == false).OrderBy(x => x.DeckRankings.Count).Distinct().Take(5).ToList())
                 {
 
                     <li>

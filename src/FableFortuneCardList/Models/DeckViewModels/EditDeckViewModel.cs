@@ -19,6 +19,7 @@ namespace FableFortuneCardList.Models.DeckViewModels
         public DeckArenaPVP ArenaPVP { get; set; }
         public ClassType Class { get; set; }
         public bool Completed { get; set; }
+        public bool Private { get; set; }
         public List<Card> AvailableCards { get; set; }
     }
 }

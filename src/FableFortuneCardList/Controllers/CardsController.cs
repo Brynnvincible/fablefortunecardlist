@@ -77,7 +77,7 @@ namespace FableFortuneCardList.Controllers
             id = Uri.UnescapeDataString(id);
             var name = id.Replace("_", " ");
 
-            var card = await _context.Card.Include(x => x.DeckCards).ThenInclude(x => x.Deck).ThenInclude(x=>x.DeckCards).ThenInclude(x=>x.Card).SingleOrDefaultAsync(m => m.Name == name);
+            var card = await _context.Card.Include(x => x.DeckCards).ThenInclude(x => x.Deck).ThenInclude(x=>x.DeckCards).ThenInclude(x=>x.Card).Include(x => x.DeckCards).ThenInclude(x => x.Deck).ThenInclude(x => x.DeckRankings).SingleOrDefaultAsync(m => m.Name == name);
 
             card.Transforms = await _context.Card.Where(x => x.Transform == card.Name).ToListAsync();
 

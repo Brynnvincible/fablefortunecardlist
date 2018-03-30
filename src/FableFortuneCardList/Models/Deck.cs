@@ -21,6 +21,8 @@ namespace FableFortuneCardList.Models
         [DisplayName("Arena")]
         public DeckArenaCoop ArenaCoop { get; set; }
         public bool Completed { get; set; }
+        public bool Private { get; set; }
+        public string GameVersion { get; set; }
         public ICollection<DeckCard> DeckCards { get; set; }
         public ICollection<DeckRanking> DeckRankings { get; set; }
         [Required]
@@ -30,6 +32,16 @@ namespace FableFortuneCardList.Models
         {
             this.DeckCards = new HashSet<DeckCard>();
             this.DeckRankings = new HashSet<DeckRanking>();
+        }
+
+        public int GetInkCost()
+        {
+            int totalCost = 0;
+            foreach(DeckCard dc in DeckCards)
+            {
+                totalCost += StandardInk.GetInkCost(dc.Card.Rarity);
+            }
+            return totalCost;
         }
     }
 }

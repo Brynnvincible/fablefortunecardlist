@@ -6,6 +6,7 @@
         Graveyard = 1,
         Rosewood = 2,
         Crucible = 3,
-        Oakfield = 4
+        Oakfield = 4,
+        Fairfax = 5
     }
 }

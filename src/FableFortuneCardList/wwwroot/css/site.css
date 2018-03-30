@@ -191,7 +191,14 @@ ul.goldCost li{
     margin:5px;
 }
 
+ul.goldCost-mini {
+    list-style-type: none;
+}
 
+    ul.goldCost-mini li {
+        float: left;
+        margin: 1px;
+    }
 
 div.cost-bar{
     background-color: #493f33;
@@ -206,8 +213,8 @@ div.cost-bar{
 div.goldCostSummary-mini{
     background-color: rgba(0,0,0,0.2);
     padding: 5px 5px;
-    height: 40px;
-    width: 220px;
+    height: 35px;
+    width: 95px;
     box-shadow: 4px 4px 8px rgba(0,0,0,0.5) inset;
     border-radius: 8px;
     border-width: 1px;
@@ -224,7 +231,7 @@ div.goldCostSummary-mini ul{
 div.goldCostSummary-mini div.cost-bar{
     background-color: #493f33;
     height: 20px;
-    width: 15px;
+    width: 8px;
     position:relative;
     border:1px solid rgba(0,0,0,0.6);
     
@@ -813,3 +820,6 @@ textarea {
     min-height: 70px;
 }
 
+.edit-checkbox {
+    margin-top: 4px !important;
+}

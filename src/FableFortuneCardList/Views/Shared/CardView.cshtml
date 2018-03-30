@@ -5,7 +5,7 @@
 @if (!string.IsNullOrEmpty(Model.ImageUrl))
 {
 <div class="cardImage">
-    <img src="~/images/cards/@System.IO.Path.GetFileName(Model.ImageUrl)" class="cardImage" />
+    <img src="~/images/cards/@System.IO.Path.GetFileName(Model.ImageUrl)?1001" class="cardImage" />
 </div>
 }else{
 <div class="cardTemplate ui-widget-header">
